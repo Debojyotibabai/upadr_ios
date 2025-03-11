@@ -8,7 +8,7 @@ struct PrimarySolidButton: View {
     
     var body: some View {
         Text(text)
-            .font(.system(size: 20, weight: .medium))
+            .font(.system(size: 20, weight: .semibold))
             .foregroundStyle(foregroundColor ?? .white)
             .padding()
             .frame(minWidth: 0,
