@@ -21,12 +21,27 @@ struct ProcedureAllStepsScreen: View {
                         
                         HStack {
                             Spacer()
-                            SolidButton(text: "Allow Notifications", width: geo.size.width * 0.75)
+                            SolidButton(text: "Allow Notifications",
+                                        width: geo.size.width * 0.75)
                             Spacer()
                         }
                     }
                     .padding(.horizontal, 25)
                     .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .topLeading)
+                    
+                    Spacer().frame(height: 15)
+                    
+                    VStack {
+                        ForEach(0..<5) { index in
+                            if(index % 2 == 0) {
+                                StepCardWithRightSideImage()
+                            } else {
+                                StepCardWithLeftSideImage()
+                            }
+                        }
+                    }
+                    
+                    Spacer().frame(height: 15)
                 }
                 
                 VStack {

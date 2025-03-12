@@ -8,7 +8,7 @@ struct SolidButton: View {
     
     var body: some View {
         Text(text)
-            .font(.system(size: 20, weight: .semibold))
+            .font(.system(size: 18, weight: .semibold))
             .foregroundStyle(foregroundColor ?? .white)
             .padding()
             .frame(minWidth: 0,
