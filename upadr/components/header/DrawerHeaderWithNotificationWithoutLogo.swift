@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct DrawerHeaderWithLogo: View {
+struct DrawerHeaderWithNotificationWithoutLogo: View {
     var body: some View {
         HStack {
             Image(systemName: "line.3.horizontal")
@@ -9,13 +9,6 @@ struct DrawerHeaderWithLogo: View {
                 .frame(width: 30, height: 30)
                 .fontWeight(.medium)
                 .foregroundStyle(.deepBlue)
-            
-            Spacer()
-            
-            Image(.logoWithName)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 100)
             
             Spacer()
             
@@ -33,5 +26,5 @@ struct DrawerHeaderWithLogo: View {
 
 
 #Preview {
-    DrawerHeaderWithLogo()
+    DrawerHeaderWithNotificationWithoutLogo()
 }

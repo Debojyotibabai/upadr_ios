@@ -21,6 +21,7 @@ struct BackHeaderWithLogoWithoutNotification: View {
         }
         .padding()
         .background(.lightSky)
+        .shadow(color: Color(.systemGray4), radius: 5, x: 0, y: 3)
     }
 }
 

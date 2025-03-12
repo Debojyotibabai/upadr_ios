@@ -12,7 +12,7 @@ struct SettingsScreen: View {
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
-                DrawerHeaderWithLogo()
+                DrawerHeaderWithLogoAndNotification()
                 
                 PrimaryHeading(text: "Settings")
                     .padding(.horizontal, 25)

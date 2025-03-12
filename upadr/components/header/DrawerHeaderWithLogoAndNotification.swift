@@ -1,12 +1,12 @@
 import SwiftUI
 
-struct BackHeaderWithLogoAndNotification: View {
+struct DrawerHeaderWithLogoAndNotification: View {
     var body: some View {
         HStack {
-            Image(systemName: "chevron.left")
+            Image(systemName: "line.3.horizontal")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 25, height: 25)
+                .frame(width: 30, height: 30)
                 .fontWeight(.medium)
                 .foregroundStyle(.deepBlue)
             
@@ -34,5 +34,5 @@ struct BackHeaderWithLogoAndNotification: View {
 
 
 #Preview {
-    BackHeaderWithLogoAndNotification()
+    DrawerHeaderWithLogoAndNotification()
 }
