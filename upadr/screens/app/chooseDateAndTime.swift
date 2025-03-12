@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct chooseDateAndTimeScreen: View {
+struct ChooseDateAndTimeScreen: View {
     @State var selectedProcedure: Int?
     
     var body: some View {
@@ -55,5 +55,5 @@ struct chooseDateAndTimeScreen: View {
 }
 
 #Preview {
-    chooseDateAndTimeScreen()
+    ChooseDateAndTimeScreen()
 }

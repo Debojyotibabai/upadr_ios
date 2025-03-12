@@ -59,7 +59,7 @@ struct SignupScreen: View {
                         
                         HStack {
                             Spacer()
-                            PrimarySolidButton(text: "Sign up", width: geo.size.width * 0.75)
+                            SolidButton(text: "Sign up", width: geo.size.width * 0.75)
                             Spacer()
                         }
                         

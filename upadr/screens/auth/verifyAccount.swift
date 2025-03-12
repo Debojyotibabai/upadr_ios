@@ -73,7 +73,7 @@ struct VerifyAccountScreen: View {
                 
                 Spacer()
                 
-                PrimarySolidButton(text: "Verify", width: geo.size.width * 0.75)
+                SolidButton(text: "Verify", width: geo.size.width * 0.75)
                 
                 Spacer().frame(height: 25)
                 

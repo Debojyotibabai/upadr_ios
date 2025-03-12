@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct chooseProcedureScreen: View {
+struct ChooseProcedureScreen: View {
     @State var selectedProcedure: Int?
     
     var body: some View {
@@ -63,13 +63,15 @@ struct chooseProcedureScreen: View {
                     
                     HStack {
                         Text("My Procedures")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundStyle(.gray2)
                         
                         Spacer()
                         
                         Image(systemName: "chevron.right")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundStyle(.gray4)
                     }
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(.gray2)
                     .padding()
                     .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .leading)
                     .background(.gray5)
@@ -83,7 +85,7 @@ struct chooseProcedureScreen: View {
                     HStack {
                         Spacer()
                         
-                        PrimarySolidButton(text: "Next", width: geo.size.width * 0.5)
+                        SolidButton(text: "Next", width: geo.size.width * 0.5)
                     }
                     .padding(.horizontal, 25)
                 }
@@ -105,5 +107,5 @@ struct chooseProcedureScreen: View {
 }
 
 #Preview {
-    chooseProcedureScreen()
+    ChooseProcedureScreen()
 }

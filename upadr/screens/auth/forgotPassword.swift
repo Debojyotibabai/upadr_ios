@@ -38,7 +38,7 @@ struct ForgotPasswordScreen: View {
                 
                 Spacer()
                 
-                PrimarySolidButton(text: "Send Code", width: geo.size.width * 0.75)
+                SolidButton(text: "Send Code", width: geo.size.width * 0.75)
             }
             .frame(minWidth: 0,
                    maxWidth: geo.size.width,

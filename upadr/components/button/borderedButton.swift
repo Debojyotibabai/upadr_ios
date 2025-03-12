@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct PrimarySolidButton: View {
+struct BorderedButton: View {
     var text: String
     var foregroundColor: Color?
     var backgroundColor: Color?
@@ -9,17 +9,21 @@ struct PrimarySolidButton: View {
     var body: some View {
         Text(text)
             .font(.system(size: 20, weight: .semibold))
-            .foregroundStyle(foregroundColor ?? .white)
+            .foregroundStyle(foregroundColor ?? .deepBlue)
             .padding()
             .frame(minWidth: 0,
                    maxWidth: width ?? .infinity)
-            .background(backgroundColor ?? .deepBlue)
+            .background(backgroundColor ?? .white)
             .clipShape(
                 Capsule()
+            )
+            .overlay(
+                Capsule()
+                    .stroke(foregroundColor ?? .deepBlue, lineWidth: 2.5)
             )
     }
 }
 
 #Preview {
-    PrimarySolidButton(text: "Button")
+    BorderedButton(text: "Button")
 }

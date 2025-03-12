@@ -56,7 +56,7 @@ struct SettingsScreen: View {
                 
                 HStack {
                     Spacer()
-                    PrimarySolidButton(text: "Delete Account", backgroundColor: .deepRed)
+                    SolidButton(text: "Delete Account", backgroundColor: .deepRed)
                         .frame(minWidth: 0, maxWidth: geo.size.width * 0.8)
                     Spacer()
                 }

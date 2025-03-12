@@ -11,11 +11,11 @@ struct WelcomeScreen: View {
                 
                 Spacer().frame(height: 100)
                 
-                PrimarySolidButton(text: "Sign Up", width: geo.size.width * 0.8)
+                SolidButton(text: "Sign Up", width: geo.size.width * 0.8)
                 
                 Spacer().frame(height: 15)
                 
-                PrimarySolidButton(text: "Login", width: geo.size.width * 0.8)
+                SolidButton(text: "Login", width: geo.size.width * 0.8)
             }
             .frame(minWidth: 0,
                    maxWidth: geo.size.width,

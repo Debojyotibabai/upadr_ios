@@ -96,7 +96,7 @@ struct CreateNewPasswordScreen: View {
                     
                     Spacer().frame(height: 50)
                     
-                    PrimarySolidButton(text: "Confirm", width: geo.size.width * 0.75)
+                    SolidButton(text: "Confirm", width: geo.size.width * 0.75)
                     
                     Spacer().frame(height: 10)
                 }
