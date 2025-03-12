@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct PrimarySubHeading: View {
+struct SubHeading: View {
     var text: String
     var foregroundColor: Color?
     
@@ -12,5 +12,5 @@ struct PrimarySubHeading: View {
 }
 
 #Preview {
-    PrimarySubHeading(text: "Primary subheading")
+    SubHeading(text: "Primary subheading")
 }

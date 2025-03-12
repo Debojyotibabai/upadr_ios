@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct PrimaryOtpInputWithoutLabel: View {
+struct OtpInputWithoutLabel: View {
     @Binding var otp: [String]
     @FocusState.Binding var focusedField: Int?
     var handleInputChange: (String, Int) -> Void

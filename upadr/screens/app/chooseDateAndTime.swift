@@ -24,11 +24,11 @@ struct ChooseDateAndTimeScreen: View {
                         VStack(alignment: .leading) {
                             Spacer().frame(height: 25)
                             
-                            PrimaryHeading(text: "Next...")
+                            Heading(text: "Next...")
                             
                             Spacer().frame(height: 13)
                             
-                            PrimarySubHeading(text: "Let’s determine when your procedure is so we can start your prep on schedule.",
+                            SubHeading(text: "Let’s determine when your procedure is so we can start your prep on schedule.",
                                               foregroundColor: .gray4)
                             
                             Spacer().frame(height: 20)

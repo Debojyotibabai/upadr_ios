@@ -14,7 +14,7 @@ struct SettingsScreen: View {
             VStack(alignment: .leading) {
                 DrawerHeaderWithLogoAndNotification()
                 
-                PrimaryHeading(text: "Settings")
+                Heading(text: "Settings")
                     .padding(.horizontal, 25)
                     .padding(.vertical, 10)
                 

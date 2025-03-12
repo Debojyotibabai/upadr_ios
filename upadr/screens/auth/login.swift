@@ -22,22 +22,22 @@ struct LoginScreen: View {
                     VStack(alignment: .leading) {
                         Spacer().frame(height: 25)
                         
-                        PrimaryHeading(text: "Login")
+                        Heading(text: "Login")
                         
                         Spacer().frame(height: 13)
                         
-                        PrimarySubHeading(text: "Please enter your email and password or log in with social media",
+                        SubHeading(text: "Please enter your email and password or log in with social media",
                                           foregroundColor: .gray1)
                         
                         Spacer().frame(height: 25)
                         
                         InputLabel(text: "Email")
-                        PrimaryInputWithoutLabel(placeholder: "email address", text: $emailAddress)
+                        InputWithoutLabel(placeholder: "email address", text: $emailAddress)
                         
                         Spacer().frame(height: 20)
                         
                         InputLabel(text: "Password")
-                        PrimaryPasswordInputWithoutLabel(placeholder: "password", text: $password)
+                        PasswordInputWithoutLabel(placeholder: "password", text: $password)
                         
                         Spacer().frame(height: 15)
                         

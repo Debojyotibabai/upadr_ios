@@ -44,18 +44,18 @@ struct VerifyAccountScreen: View {
                 Spacer().frame(height: 100)
                 
                 VStack(alignment: .leading) {
-                    PrimaryHeading(text: "Verify Your Email")
+                    Heading(text: "Verify Your Email")
                     
                     Spacer().frame(height: 13)
                     
-                    PrimarySubHeading(text: "Please enter the 6 digit code sent to email@example.com",
+                    SubHeading(text: "Please enter the 6 digit code sent to email@example.com",
                                       foregroundColor: .gray1)
                 }
                 .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .leading)
                 
                 Spacer().frame(height: 80)
                 
-                PrimaryOtpInputWithoutLabel(otp: $otp,
+                OtpInputWithoutLabel(otp: $otp,
                                             focusedField: $focusedField,
                                             handleInputChange: handleInputChange)
                 

@@ -23,18 +23,18 @@ struct ForgotPasswordScreen: View {
                 Spacer().frame(height: 100)
                 
                 VStack(alignment: .leading) {
-                    PrimaryHeading(text: "Forgot Your Password?")
+                    Heading(text: "Forgot Your Password?")
                     
                     Spacer().frame(height: 13)
                     
-                    PrimarySubHeading(text: "Please enter the email or phone number you signed up with to reset your password",
+                    SubHeading(text: "Please enter the email or phone number you signed up with to reset your password",
                                       foregroundColor: .gray1)
                 }
                 .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .leading)
                 
                 Spacer().frame(height: 80)
                 
-                PrimaryInputWithoutLabel(placeholder: "email address", text: $emailAddress)
+                InputWithoutLabel(placeholder: "email address", text: $emailAddress)
                 
                 Spacer()
                 

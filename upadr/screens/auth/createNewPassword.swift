@@ -48,18 +48,18 @@ struct CreateNewPasswordScreen: View {
                     Spacer().frame(height: 100)
                     
                     VStack(alignment: .leading) {
-                        PrimaryHeading(text: "Create New Password")
+                        Heading(text: "Create New Password")
                         
                         Spacer().frame(height: 13)
                         
-                        PrimarySubHeading(text: "Please enter the 6 digit code sent to email@example.com",
+                        SubHeading(text: "Please enter the 6 digit code sent to email@example.com",
                                           foregroundColor: .gray1)
                     }
                     .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .leading)
                     
                     Spacer().frame(height: 80)
                     
-                    PrimaryOtpInputWithoutLabel(otp: $otp,
+                    OtpInputWithoutLabel(otp: $otp,
                                                 focusedField: $focusedField,
                                                 handleInputChange: handleInputChange)
                     
@@ -78,18 +78,18 @@ struct CreateNewPasswordScreen: View {
                     Spacer().frame(height: 40)
                     
                     VStack(alignment: .leading) {
-                        PrimarySubHeading(text: "Your new password must be different from your previously used password",
+                        SubHeading(text: "Your new password must be different from your previously used password",
                                           foregroundColor: .gray1)
                         
                         Spacer().frame(height: 30)
                         
                         InputLabel(text: "Password")
-                        PrimaryPasswordInputWithoutLabel(placeholder: "password", text: $password)
+                        PasswordInputWithoutLabel(placeholder: "password", text: $password)
                         
                         Spacer().frame(height: 20)
                         
                         InputLabel(text: "Confirm Password")
-                        PrimaryPasswordInputWithoutLabel(placeholder: "confirm password", text: $confirmPassword)
+                        PasswordInputWithoutLabel(placeholder: "confirm password", text: $confirmPassword)
                     }
                     .frame(minWidth: 0,
                            maxWidth: geo.size.width)

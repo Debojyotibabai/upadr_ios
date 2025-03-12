@@ -24,16 +24,16 @@ struct ChooseProcedureScreen: View {
                         VStack(alignment: .leading) {
                             Spacer().frame(height: 25)
                             
-                            PrimaryHeading(text: "Welcome to upadr!")
+                            Heading(text: "Welcome to upadr!")
                             
                             Spacer().frame(height: 13)
                             
-                            PrimarySubHeading(text: "We’re here to get you ready for your procedure and make sure you have everything you need.",
+                            SubHeading(text: "We’re here to get you ready for your procedure and make sure you have everything you need.",
                                               foregroundColor: .gray4)
                             
                             Spacer().frame(height: 15)
                             
-                            PrimarySubHeading(text: "Let’s start with determining what procedure you",
+                            SubHeading(text: "Let’s start with determining what procedure you",
                                               foregroundColor: .black)
                             
                             Spacer().frame(height: 20)

@@ -6,12 +6,12 @@ struct MyProceduresScreen: View {
             VStack(alignment: .leading) {
                 DrawerHeaderWithLogoAndNotification()
                 
-                PrimaryHeading(text: "My Procedures")
+                Heading(text: "My Procedures")
                     .padding(.horizontal, 25)
                     .padding(.vertical, 10)
                 
                 VStack(alignment: .leading) {
-                    PrimarySubHeading(text: "Upcoming", foregroundColor: .gray4)
+                    SubHeading(text: "Upcoming", foregroundColor: .gray4)
                     
                     Divider()
                 }
@@ -46,7 +46,7 @@ struct MyProceduresScreen: View {
                 }
                 
                 VStack(alignment: .leading) {
-                    PrimarySubHeading(text: "Completed", foregroundColor: .gray4)
+                    SubHeading(text: "Completed", foregroundColor: .gray4)
                     
                     Divider()
                 }

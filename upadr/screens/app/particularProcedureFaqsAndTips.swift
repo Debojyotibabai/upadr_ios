@@ -9,11 +9,11 @@ struct ParticularProcedureFAqsAndTipsScreen: View {
                 BackHeaderWithLogoAndNotification()
                 
                 VStack(alignment: .leading) {
-                    PrimaryHeading(text: "FAQs and Tips")
+                    Heading(text: "FAQs and Tips")
                     
                     Spacer().frame(height: 13)
                     
-                    PrimarySubHeading(text: "Here are some FAQs and Tips for a Procedure 1",
+                    SubHeading(text: "Here are some FAQs and Tips for a Procedure 1",
                                       foregroundColor: .gray3)
                 }
                 .padding(.horizontal, 25)
@@ -43,7 +43,7 @@ struct ParticularProcedureFAqsAndTipsScreen: View {
                                 faqAndTipsData[index] ? VStack {
                                     Divider()
                                     
-                                    PrimarySubHeading(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris", foregroundColor: .gray2)
+                                    SubHeading(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris", foregroundColor: .gray2)
                                 }
                                 .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .leading)
                                 : nil

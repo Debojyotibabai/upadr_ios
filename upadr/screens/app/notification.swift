@@ -6,7 +6,7 @@ struct NotificationScreen: View {
             VStack(alignment: .leading) {
                 BackHeaderWithLogoWithoutNotification()
                 
-                PrimaryHeading(text: "Notifications")
+                Heading(text: "Notifications")
                     .padding(.horizontal, 25)
                     .padding(.vertical, 10)
                 
@@ -24,7 +24,7 @@ struct NotificationScreen: View {
                                         .font(.system(size: 20, weight: .medium))
                                         .foregroundColor(.gray3)
                                     
-                                    PrimarySubHeading(text: "It’s 1 day until your procedure! It’s time to lorem ipsum dolor sit amet dolor...", foregroundColor: .gray4)
+                                    SubHeading(text: "It’s 1 day until your procedure! It’s time to lorem ipsum dolor sit amet dolor...", foregroundColor: .gray4)
                                 }
                             }
                             .padding()

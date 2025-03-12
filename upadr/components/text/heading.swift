@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct PrimaryHeading: View {
+struct Heading: View {
     var text: String
     
     var body: some View {
@@ -11,5 +11,5 @@ struct PrimaryHeading: View {
 }
 
 #Preview {
-    PrimaryHeading(text: "Primary heading")
+    Heading(text: "Primary heading")
 }

@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct PrimaryInputWithoutLabel: View {
+struct InputWithoutLabel: View {
     var placeholder:String
     @Binding var text: String
     
@@ -19,5 +19,5 @@ struct PrimaryInputWithoutLabel: View {
 }
 
 #Preview {
-    PrimaryInputWithoutLabel(placeholder: "Input", text: .constant(""))
+    InputWithoutLabel(placeholder: "Input", text: .constant(""))
 }

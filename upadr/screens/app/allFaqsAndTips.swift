@@ -6,7 +6,7 @@ struct AllFaqsAndTipsScreen: View {
             VStack(alignment: .leading) {
                 DrawerHeaderWithLogoAndNotification()
                 
-                PrimaryHeading(text: "FAQs and Tips")
+                Heading(text: "FAQs and Tips")
                     .padding(.horizontal, 25)
                     .padding(.vertical, 10)
                 
