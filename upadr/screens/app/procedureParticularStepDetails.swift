@@ -20,7 +20,7 @@ struct ProcedureParticularStepDetailsScreen: View {
                         Spacer().frame(height: 15)
                         
                         Rectangle()
-                            .frame(height: 250)
+                            .frame(height: 230)
                             .foregroundStyle(Color(.systemGray5))
                         
                         Spacer().frame(height: 15)
