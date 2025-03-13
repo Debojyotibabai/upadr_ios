@@ -5,6 +5,7 @@ struct SolidButton: View {
     var foregroundColor: Color?
     var backgroundColor: Color?
     var width: CGFloat?
+    var onPress: () -> Void = {}
     
     var body: some View {
         Text(text)
@@ -17,6 +18,9 @@ struct SolidButton: View {
             .clipShape(
                 Capsule()
             )
+            .onTapGesture {
+                onPress()
+            }
     }
 }
 

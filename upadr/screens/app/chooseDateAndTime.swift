@@ -3,6 +3,12 @@ import SwiftUI
 struct ChooseDateAndTimeScreen: View {
     @State var selectedProcedure: Int?
     
+    @State var selectedDate: Date = Date()
+    @State var showDatePicker: Bool = false
+    
+    @State var selectedTime: Date = Date()
+    @State var showTimePicker: Bool = false
+    
     var body: some View {
         GeometryReader { geo in
             VStack {
@@ -19,23 +25,39 @@ struct ChooseDateAndTimeScreen: View {
                        minHeight: 0,
                        maxHeight: geo.size.height * 0.3)
                 
-                VStack {
-                    ScrollView(showsIndicators: false) {
-                        VStack(alignment: .leading) {
-                            Spacer().frame(height: 25)
+                ScrollView(showsIndicators: false) {
+                    VStack(alignment: .leading) {
+                        Spacer().frame(height: 25)
+                        
+                        Heading(text: "Next...")
+                        
+                        Spacer().frame(height: 13)
+                        
+                        SubHeading(text: "Let’s determine when your procedure is so we can start your prep on schedule.",
+                                   foregroundColor: .gray4)
+                        
+                        Spacer().frame(height: 20)
+                        
+                        InputLabel(text: "Date")
+                        DatePickerWithoutLabel(selectedDate: $selectedDate, showDatePicker: $showDatePicker)
+                        
+                        Spacer().frame(height: 20)
+                        
+                        InputLabel(text: "Time")
+                        TimePickerWithoutLabel(selectedTime: $selectedTime, showTimePicker: $showTimePicker)
+                        
+                        Spacer().frame(height: 50)
+                        
+                        HStack {
+                            BorderedButton(text: "Back", foregroundColor: .deepSky, width: geo.size.width * 0.35)
                             
-                            Heading(text: "Next...")
+                            Spacer()
                             
-                            Spacer().frame(height: 13)
-                            
-                            SubHeading(text: "Let’s determine when your procedure is so we can start your prep on schedule.",
-                                              foregroundColor: .gray4)
-                            
-                            Spacer().frame(height: 20)
+                            SolidButton(text: "Next", width: geo.size.width * 0.45)
                         }
-                        .padding(.horizontal, 25)
-                        .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .leading)
                     }
+                    .padding(.horizontal, 25)
+                    .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .leading)
                 }
                 .frame(minWidth: 0,
                        maxWidth: geo.size.width,

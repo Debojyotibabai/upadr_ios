@@ -29,12 +29,12 @@ struct ChooseProcedureScreen: View {
                             Spacer().frame(height: 13)
                             
                             SubHeading(text: "We’re here to get you ready for your procedure and make sure you have everything you need.",
-                                              foregroundColor: .gray4)
+                                       foregroundColor: .gray4)
                             
                             Spacer().frame(height: 15)
                             
                             SubHeading(text: "Let’s start with determining what procedure you",
-                                              foregroundColor: .black)
+                                       foregroundColor: .black)
                             
                             Spacer().frame(height: 20)
                         }
