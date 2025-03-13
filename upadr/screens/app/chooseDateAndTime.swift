@@ -1,8 +1,6 @@
 import SwiftUI
 
 struct ChooseDateAndTimeScreen: View {
-    @State var selectedProcedure: Int?
-    
     @State var selectedDate: Date = Date()
     @State var showDatePicker: Bool = false
     

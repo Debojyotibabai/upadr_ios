@@ -10,7 +10,33 @@ struct ProcedureAllStepsScreen: View {
                     VStack(alignment: .leading) {
                         Spacer().frame(height: 10)
                         
-                        Heading(text: "Great! Here’s an overview on what your prep process for Procedure Name will look like.")
+                        HStack(alignment: .top) {
+                            Heading(text: "Great! Here’s an overview on what your prep process for Procedure Name will look like.")
+                            
+                            Spacer()
+                            
+                            VStack {
+                                Spacer().frame(height: 10)
+                                
+                                Menu {
+                                    Button {
+                                        
+                                    } label: {
+                                        SubHeading(text: "Edit Procedure")
+                                    }
+                                    
+                                    Button {
+                                        
+                                    } label: {
+                                        SubHeading(text: "Cancel Procedure")
+                                    }
+                                } label: {
+                                    Image(systemName: "ellipsis")
+                                        .font(.system(size: 25))
+                                        .foregroundStyle(.gray4)
+                                }
+                            }
+                        }
                         
                         Spacer().frame(height: 15)
                         
