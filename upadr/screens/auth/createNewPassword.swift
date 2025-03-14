@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct CreateNewPasswordScreen: View {
+    @EnvironmentObject var authViewModel: AuthViewModel
+    
     @State var otp: [String] = Array(repeating: "", count: 6)
     @FocusState var focusedField: Int?
     
@@ -35,6 +37,10 @@ struct CreateNewPasswordScreen: View {
                         Image(systemName: "chevron.left")
                             .font(.title)
                             .fontWeight(.medium)
+                            .onTapGesture {
+                                authViewModel.authNavigationPath.removeLast()
+                            }
+                        
                         Spacer()
                     }
                     
@@ -53,15 +59,15 @@ struct CreateNewPasswordScreen: View {
                         Spacer().frame(height: 13)
                         
                         SubHeading(text: "Please enter the 6 digit code sent to email@example.com",
-                                          foregroundColor: .gray1)
+                                   foregroundColor: .gray1)
                     }
                     .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .leading)
                     
                     Spacer().frame(height: 80)
                     
                     OtpInputWithoutLabel(otp: $otp,
-                                                focusedField: $focusedField,
-                                                handleInputChange: handleInputChange)
+                                         focusedField: $focusedField,
+                                         handleInputChange: handleInputChange)
                     
                     Spacer().frame(height: 40)
                     
@@ -79,7 +85,7 @@ struct CreateNewPasswordScreen: View {
                     
                     VStack(alignment: .leading) {
                         SubHeading(text: "Your new password must be different from your previously used password",
-                                          foregroundColor: .gray1)
+                                   foregroundColor: .gray1)
                         
                         Spacer().frame(height: 30)
                         
@@ -96,7 +102,10 @@ struct CreateNewPasswordScreen: View {
                     
                     Spacer().frame(height: 50)
                     
-                    SolidButton(text: "Confirm", width: geo.size.width * 0.75)
+                    SolidButton(text: "Confirm", width: geo.size.width * 0.75, onPress: {
+                        authViewModel.authNavigationPath = NavigationPath()
+                        authViewModel.authNavigationPath.append(AuthScreens.login)
+                    })
                     
                     Spacer().frame(height: 10)
                 }
@@ -114,4 +123,5 @@ struct CreateNewPasswordScreen: View {
 
 #Preview {
     CreateNewPasswordScreen()
+        .environmentObject(AuthViewModel())
 }

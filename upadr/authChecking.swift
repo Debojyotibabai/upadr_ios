@@ -1,17 +1,19 @@
 import SwiftUI
 
 struct AuthChecking: View {
+    @StateObject var authVieModel: AuthViewModel = AuthViewModel()
+    @StateObject var appVieModel: AppViewModel = AppViewModel()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        if(authVieModel.isLoggedIn) {
+            SettingsScreen()
+        } else {
+            WelcomeScreen()
+                .environmentObject(authVieModel)
         }
-        .padding()
     }
 }
 
 #Preview {
-    AuthChecking()
+    AuthChecking(authVieModel: AuthViewModel(), appVieModel: AppViewModel())
 }

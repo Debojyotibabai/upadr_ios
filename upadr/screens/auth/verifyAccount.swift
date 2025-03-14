@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct VerifyAccountScreen: View {
+    @EnvironmentObject var authViewModel: AuthViewModel
+    
     @State var otp: [String] = Array(repeating: "", count: 6)
     @FocusState var focusedField: Int?
     
@@ -31,6 +33,10 @@ struct VerifyAccountScreen: View {
                     Image(systemName: "chevron.left")
                         .font(.title)
                         .fontWeight(.medium)
+                        .onTapGesture {
+                            authViewModel.authNavigationPath.removeLast()
+                        }
+                    
                     Spacer()
                 }
                 
@@ -49,15 +55,15 @@ struct VerifyAccountScreen: View {
                     Spacer().frame(height: 13)
                     
                     SubHeading(text: "Please enter the 6 digit code sent to email@example.com",
-                                      foregroundColor: .gray1)
+                               foregroundColor: .gray1)
                 }
                 .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .leading)
                 
                 Spacer().frame(height: 80)
                 
                 OtpInputWithoutLabel(otp: $otp,
-                                            focusedField: $focusedField,
-                                            handleInputChange: handleInputChange)
+                                     focusedField: $focusedField,
+                                     handleInputChange: handleInputChange)
                 
                 Spacer().frame(height: 40)
                 
@@ -73,13 +79,19 @@ struct VerifyAccountScreen: View {
                 
                 Spacer()
                 
-                SolidButton(text: "Verify", width: geo.size.width * 0.75)
+                SolidButton(text: "Verify", width: geo.size.width * 0.75, onPress: {
+                    authViewModel.authNavigationPath = NavigationPath()
+                    authViewModel.authNavigationPath.append(AuthScreens.login)
+                })
                 
                 Spacer().frame(height: 25)
                 
                 Text("Change Email?")
                     .font(.system(size: 18, weight: .medium))
                     .foregroundColor(.deepSky)
+                    .onTapGesture {
+                        authViewModel.authNavigationPath.removeLast()
+                    }
             }
             .frame(minWidth: 0,
                    maxWidth: geo.size.width,
@@ -93,4 +105,5 @@ struct VerifyAccountScreen: View {
 
 #Preview {
     VerifyAccountScreen()
+        .environmentObject(AuthViewModel())
 }

@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct ForgotPasswordScreen: View {
+    @EnvironmentObject var authViewModel: AuthViewModel
+    
     @State var emailAddress: String = ""
     
     var body: some View {
@@ -10,6 +12,10 @@ struct ForgotPasswordScreen: View {
                     Image(systemName: "chevron.left")
                         .font(.title)
                         .fontWeight(.medium)
+                        .onTapGesture {
+                            authViewModel.authNavigationPath.removeLast()
+                        }
+                    
                     Spacer()
                 }
                 
@@ -28,7 +34,7 @@ struct ForgotPasswordScreen: View {
                     Spacer().frame(height: 13)
                     
                     SubHeading(text: "Please enter the email or phone number you signed up with to reset your password",
-                                      foregroundColor: .gray1)
+                               foregroundColor: .gray1)
                 }
                 .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .leading)
                 
@@ -38,7 +44,9 @@ struct ForgotPasswordScreen: View {
                 
                 Spacer()
                 
-                SolidButton(text: "Send Code", width: geo.size.width * 0.75)
+                SolidButton(text: "Send Code", width: geo.size.width * 0.75, onPress: {
+                    authViewModel.authNavigationPath.append(AuthScreens.createNewPassword)
+                })
             }
             .frame(minWidth: 0,
                    maxWidth: geo.size.width,
@@ -52,4 +60,5 @@ struct ForgotPasswordScreen: View {
 
 #Preview {
     ForgotPasswordScreen()
+        .environmentObject(AuthViewModel())
 }

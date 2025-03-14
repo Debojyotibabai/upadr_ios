@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct LoginScreen: View {
+    @EnvironmentObject var authViewModel: AuthViewModel
+    
     @State var emailAddress:String = ""
     @State var password:String = ""
     
@@ -27,7 +29,7 @@ struct LoginScreen: View {
                         Spacer().frame(height: 13)
                         
                         SubHeading(text: "Please enter your email and password or log in with social media",
-                                          foregroundColor: .gray1)
+                                   foregroundColor: .gray1)
                         
                         Spacer().frame(height: 25)
                         
@@ -46,6 +48,9 @@ struct LoginScreen: View {
                             Text("Forgot Password?")
                                 .font(.system(size: 18, weight: .medium))
                                 .foregroundColor(.deepSky)
+                                .onTapGesture {
+                                    authViewModel.authNavigationPath.append(AuthScreens.forgotPassword)
+                                }
                         }
                         
                         Spacer().frame(height: 50)
@@ -68,6 +73,10 @@ struct LoginScreen: View {
                                 Text("Sign up")
                                     .font(.system(size: 18, weight: .medium))
                                     .foregroundColor(.deepSky)
+                                    .onTapGesture {
+                                        authViewModel.authNavigationPath = NavigationPath()
+                                        authViewModel.authNavigationPath.append(AuthScreens.signup)
+                                    }
                             }
                             Spacer()
                         }
@@ -95,4 +104,5 @@ struct LoginScreen: View {
 
 #Preview {
     LoginScreen()
+        .environmentObject(AuthViewModel())
 }

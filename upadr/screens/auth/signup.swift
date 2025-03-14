@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct SignupScreen: View {
+    @EnvironmentObject var authViewModel: AuthViewModel
+    
     @State var firstName:String = ""
     @State var lastName:String = ""
     @State var emailAddress:String = ""
@@ -30,7 +32,7 @@ struct SignupScreen: View {
                         Spacer().frame(height: 13)
                         
                         SubHeading(text: "Please enter your email and password or sign up with social media",
-                                          foregroundColor: .gray1)
+                                   foregroundColor: .gray1)
                         
                         Spacer().frame(height: 25)
                         
@@ -59,7 +61,9 @@ struct SignupScreen: View {
                         
                         HStack {
                             Spacer()
-                            SolidButton(text: "Sign up", width: geo.size.width * 0.75)
+                            SolidButton(text: "Sign up", width: geo.size.width * 0.75, onPress: {
+                                authViewModel.authNavigationPath.append(AuthScreens.verifyAccount)
+                            })
                             Spacer()
                         }
                         
@@ -75,6 +79,10 @@ struct SignupScreen: View {
                                 Text("Log in")
                                     .font(.system(size: 18, weight: .medium))
                                     .foregroundColor(.deepSky)
+                                    .onTapGesture {
+                                        authViewModel.authNavigationPath = NavigationPath()
+                                        authViewModel.authNavigationPath.append(AuthScreens.login)
+                                    }
                             }
                             Spacer()
                         }
@@ -102,4 +110,5 @@ struct SignupScreen: View {
 
 #Preview {
     SignupScreen()
+        .environmentObject(AuthViewModel())
 }
