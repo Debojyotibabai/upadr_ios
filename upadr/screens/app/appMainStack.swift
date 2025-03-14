@@ -5,7 +5,22 @@ struct AppMainStack: View {
     @EnvironmentObject var appViewModel: AppViewModel
     
     var body: some View {
-        Text("")
+        ZStack {
+            switch appViewModel.selectedAppStack {
+            case .chooseProcedureStack:
+                ChooseProcedureStack()
+            case .procedureStack:
+                ProcedureStack()
+            case .tipStack:
+                TipStack()
+            case .surveyStack:
+                SurveyStack()
+            case .settingsStack:
+                SettingsStack()
+            case .notificationStack:
+                NotificationStack()
+            }
+        }
     }
 }
 

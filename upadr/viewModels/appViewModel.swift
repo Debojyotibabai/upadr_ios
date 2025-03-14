@@ -1,39 +1,68 @@
 import SwiftUI
 
 class AppViewModel: ObservableObject {
+    @Published var chooseProcedureStackNavigationPath: NavigationPath = NavigationPath()
+    @Published var procedureStackNavigationPath: NavigationPath = NavigationPath()
+    @Published var tipStackNavigationPath: NavigationPath = NavigationPath()
+    @Published var surveyStackNavigationPath: NavigationPath = NavigationPath()
+    @Published var settingsStackNavigationPath: NavigationPath = NavigationPath()
+    @Published var notificationStackNavigationPath: NavigationPath = NavigationPath()
     
+    @Published var selectedAppStack: AppStacks = .procedureStack
 }
 
-enum AppScreens: Int, CaseIterable {
-    case procedure, tip, survey, settings, notification
+enum AppStacks: Int, CaseIterable {
+    case chooseProcedureStack, procedureStack, tipStack, surveyStack, settingsStack, notificationStack
     
-    var title:String {
+    var title: String {
         switch self {
-        case .procedure:
+        case .chooseProcedureStack:
+            return ""
+        case .procedureStack:
             return "My Procedures"
-        case .tip:
+        case .tipStack:
             return "Tips"
-        case .survey:
+        case .surveyStack:
             return "Surveys"
-        case .settings:
+        case .settingsStack:
             return "Settings"
-        case .notification:
+        case .notificationStack:
             return "Notifications"
         }
     }
     
-    var icon:String {
+    var icon: String {
         switch self {
-        case .procedure:
+        case .chooseProcedureStack:
+            return ""
+        case .procedureStack:
             return "stethoscope"
-        case .tip:
+        case .tipStack:
             return "lightbulb.fill"
-        case .survey:
+        case .surveyStack:
             return "text.page.fill"
-        case .settings:
+        case .settingsStack:
             return "gearshape.fill"
-        case .notification:
+        case .notificationStack:
             return "bell.fill"
         }
     }
 }
+
+enum ChooseProcedureStackScreens {
+    case chooseDateAndTime
+}
+
+enum ProcedureStackScreens {
+    case editProcedure, procedureAllSteps, procedureParticularStepDetails
+}
+
+enum TipStackScreens {
+    case particularProcedureFaqsAndTips
+}
+
+enum SurveyStackScreens {}
+
+enum SettingsStackScreens {}
+
+enum NotificationStackScreens {}

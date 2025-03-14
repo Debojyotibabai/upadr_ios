@@ -33,7 +33,7 @@ struct SidebarDrawer: View {
                     Spacer()
                     
                     VStack(alignment: .leading) {
-                        ForEach(AppScreens.allCases, id: \.self.rawValue) { item in
+                        ForEach(AppStacks.allCases, id: \.self.rawValue) { item in
                             Button {
                                 
                             } label: {
