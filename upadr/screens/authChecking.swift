@@ -6,7 +6,9 @@ struct AuthChecking: View {
     
     var body: some View {
         if(authVieModel.isLoggedIn) {
-            SettingsScreen()
+            AppMainStack()
+                .environmentObject(authVieModel)
+                .environmentObject(appVieModel)
         } else {
             WelcomeScreen()
                 .environmentObject(authVieModel)

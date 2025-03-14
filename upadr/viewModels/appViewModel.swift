@@ -5,34 +5,34 @@ class AppViewModel: ObservableObject {
 }
 
 enum AppScreens: Int, CaseIterable {
-    case procedures, tips, surveys, settings, notifications
+    case procedure, tip, survey, settings, notification
     
     var title:String {
         switch self {
-        case .procedures:
+        case .procedure:
             return "My Procedures"
-        case .tips:
+        case .tip:
             return "Tips"
-        case .surveys:
+        case .survey:
             return "Surveys"
         case .settings:
             return "Settings"
-        case .notifications:
+        case .notification:
             return "Notifications"
         }
     }
     
     var icon:String {
         switch self {
-        case .procedures:
+        case .procedure:
             return "stethoscope"
-        case .tips:
+        case .tip:
             return "lightbulb.fill"
-        case .surveys:
+        case .survey:
             return "text.page.fill"
         case .settings:
             return "gearshape.fill"
-        case .notifications:
+        case .notification:
             return "bell.fill"
         }
     }
