@@ -43,6 +43,9 @@ struct MyProceduresScreen: View {
                             .shadow(color: Color(.systemGray4), radius: 5, x: 0, y: 3)
                             .padding(.horizontal, 25)
                             .padding(.bottom, 10)
+                            .onTapGesture {
+                                appViewModel.procedureStackNavigationPath.append(ProcedureStackScreens.procedureAllSteps)
+                            }
                         }
                     }
                 }
@@ -78,16 +81,27 @@ struct MyProceduresScreen: View {
                             .shadow(color: Color(.systemGray4), radius: 5, x: 0, y: 3)
                             .padding(.horizontal, 25)
                             .padding(.bottom, 10)
+                            .onTapGesture {
+                                appViewModel.procedureStackNavigationPath.append(ProcedureStackScreens.procedureAllSteps)
+                            }
                         }
                     }
                 }
                 
                 VStack {
-                    SolidButton(text: "FAQ’s and Tips", width: geo.size.width * 0.75)
+                    SolidButton(text: "FAQ’s and Tips", width: geo.size.width * 0.75, onPress: {
+                        appViewModel.selectedAppStack = .tipStack
+                    })
                     
                     Spacer().frame(height: 10)
                     
-                    BorderedButton(text: "Prep For Another Procedure", foregroundColor: .deepSky, width: geo.size.width * 0.75)
+                    BorderedButton(text: "Prep For Another Procedure",
+                                   foregroundColor: .deepSky,
+                                   width: geo.size.width * 0.75,
+                                   onPress: {
+                        appViewModel.chooseProcedureStackNavigationPath = NavigationPath()
+                        appViewModel.selectedAppStack = .chooseProcedureStack
+                    })
                 }
                 .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .center)
             }

@@ -6,7 +6,9 @@ struct ProcedureAllStepsScreen: View {
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
-                DrawerHeaderWithLogoAndNotification()
+                BackHeaderWithLogoAndNotification(onBack: {
+                    appViewModel.procedureStackNavigationPath.removeLast()
+                })
                 
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .leading) {
@@ -22,7 +24,7 @@ struct ProcedureAllStepsScreen: View {
                                 
                                 Menu {
                                     Button {
-                                        
+                                        appViewModel.procedureStackNavigationPath.append(ProcedureStackScreens.editProcedure)
                                     } label: {
                                         SubHeading(text: "Edit Procedure")
                                     }
@@ -62,9 +64,13 @@ struct ProcedureAllStepsScreen: View {
                     VStack {
                         ForEach(0..<5) { index in
                             if(index % 2 == 0) {
-                                StepCardWithRightSideImage()
+                                StepCardWithRightSideImage(seeMoreOnPress: {
+                                    appViewModel.procedureStackNavigationPath.append(ProcedureStackScreens.procedureParticularStepDetails)
+                                })
                             } else {
-                                StepCardWithLeftSideImage()
+                                StepCardWithLeftSideImage(seeMoreOnPress: {
+                                    appViewModel.procedureStackNavigationPath.append(ProcedureStackScreens.procedureParticularStepDetails)
+                                })
                             }
                         }
                     }
@@ -73,11 +79,14 @@ struct ProcedureAllStepsScreen: View {
                 }
                 
                 VStack {
-                    SolidButton(text: "FAQ’s and Tips", width: geo.size.width * 0.75)
+                    SolidButton(text: "FAQ’s and Tips", width: geo.size.width * 0.75, onPress: {
+                        appViewModel.selectedAppStack = .tipStack
+                    })
                 }
                 .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .center)
             }
         }
+        .navigationBarBackButtonHidden()
     }
 }
 

@@ -6,12 +6,12 @@ struct TipStack: View {
     var body: some View {
         NavigationStack(path: $appViewModel.tipStackNavigationPath) {
             AllFaqsAndTipsScreen()
-        }
-        .navigationDestination(for: TipStackScreens.self) { screen in
-            switch screen {
-            case .particularProcedureFaqsAndTips:
-                ParticularProcedureFAqsAndTipsScreen()
-            }
+                .navigationDestination(for: TipStackScreens.self) { screen in
+                    switch screen {
+                    case .particularProcedureFaqsAndTips:
+                        ParticularProcedureFAqsAndTipsScreen()
+                    }
+                }
         }
     }
 }

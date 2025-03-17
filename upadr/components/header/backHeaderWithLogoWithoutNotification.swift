@@ -3,6 +3,8 @@ import SwiftUI
 struct BackHeaderWithLogoWithoutNotification: View {
     @EnvironmentObject var appViewModel: AppViewModel
     
+    var onBack: () -> Void = {}
+    
     var body: some View {
         HStack {
             Image(systemName: "chevron.left")
@@ -11,6 +13,9 @@ struct BackHeaderWithLogoWithoutNotification: View {
                 .frame(width: 25, height: 25)
                 .fontWeight(.medium)
                 .foregroundStyle(.deepBlue)
+                .onTapGesture {
+                    onBack()
+                }
             
             Spacer()
             

@@ -27,6 +27,9 @@ struct AllFaqsAndTipsScreen: View {
                                 .shadow(color: Color(.systemGray4), radius: 5, x: 0, y: 3)
                                 .padding(.horizontal, 25)
                                 .padding(.bottom, 10)
+                                .onTapGesture {
+                                    appViewModel.tipStackNavigationPath.append(TipStackScreens.particularProcedureFaqsAndTips)
+                                }
                         }
                     }
                 }

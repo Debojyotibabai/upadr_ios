@@ -49,11 +49,19 @@ struct ChooseDateAndTimeScreen: View {
                         Spacer().frame(height: 50)
                         
                         HStack {
-                            BorderedButton(text: "Back", foregroundColor: .deepSky, width: geo.size.width * 0.35)
+                            BorderedButton(text: "Back",
+                                           foregroundColor: .deepSky,
+                                           width: geo.size.width * 0.35,
+                                           onPress: {
+                                appViewModel.chooseProcedureStackNavigationPath.removeLast()
+                            })
                             
                             Spacer()
                             
-                            SolidButton(text: "Next", width: geo.size.width * 0.45)
+                            SolidButton(text: "Next", width: geo.size.width * 0.45, onPress: {
+                                appViewModel.selectedAppStack = .procedureStack
+                                appViewModel.procedureStackNavigationPath.append(ProcedureStackScreens.procedureAllSteps)
+                            })
                         }
                     }
                     .padding(.horizontal, 25)
@@ -73,6 +81,7 @@ struct ChooseDateAndTimeScreen: View {
                    alignment: .top)
             .background(.lightSky)
         }
+        .navigationBarBackButtonHidden()
     }
 }
 

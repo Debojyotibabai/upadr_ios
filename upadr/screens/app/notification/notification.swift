@@ -6,7 +6,9 @@ struct NotificationScreen: View {
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
-                BackHeaderWithLogoWithoutNotification()
+                BackHeaderWithLogoWithoutNotification(onBack: {
+                    appViewModel.selectedAppStack = appViewModel.selectedPreviousAppStack
+                })
                 
                 Heading(text: "Notifications")
                     .padding(.horizontal, 25)

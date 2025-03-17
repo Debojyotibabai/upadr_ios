@@ -9,6 +9,7 @@ class AppViewModel: ObservableObject {
     @Published var notificationStackNavigationPath: NavigationPath = NavigationPath()
     
     @Published var selectedAppStack: AppStacks = .procedureStack
+    @Published var selectedPreviousAppStack: AppStacks = .procedureStack
     
     @Published var isSidebarDrawerOpened: Bool = false
     

@@ -5,6 +5,7 @@ struct BorderedButton: View {
     var foregroundColor: Color?
     var backgroundColor: Color?
     var width: CGFloat?
+    var onPress: () -> Void = {}
     
     var body: some View {
         Text(text)
@@ -21,6 +22,9 @@ struct BorderedButton: View {
                 Capsule()
                     .stroke(foregroundColor ?? .deepBlue, lineWidth: 2.5)
             )
+            .onTapGesture {
+                onPress()
+            }
     }
 }
 

@@ -6,16 +6,16 @@ struct ProcedureStack: View {
     var body: some View {
         NavigationStack(path: $appViewModel.procedureStackNavigationPath) {
             MyProceduresScreen()
-        }
-        .navigationDestination(for: ProcedureStackScreens.self) { screen in
-            switch screen {
-            case .editProcedure:
-                EditProcedureScreen()
-            case .procedureAllSteps:
-                ProcedureAllStepsScreen()
-            case .procedureParticularStepDetails:
-                ProcedureParticularStepDetailsScreen()
-            }
+                .navigationDestination(for: ProcedureStackScreens.self) { screen in
+                    switch screen {
+                    case .editProcedure:
+                        EditProcedureScreen()
+                    case .procedureAllSteps:
+                        ProcedureAllStepsScreen()
+                    case .procedureParticularStepDetails:
+                        ProcedureParticularStepDetailsScreen()
+                    }
+                }
         }
     }
 }

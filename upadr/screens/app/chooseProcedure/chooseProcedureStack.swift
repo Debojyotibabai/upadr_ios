@@ -6,12 +6,12 @@ struct ChooseProcedureStack: View {
     var body: some View {
         NavigationStack(path: $appViewModel.chooseProcedureStackNavigationPath) {
             ChooseProcedureScreen()
-        }
-        .navigationDestination(for: ChooseProcedureStackScreens.self) { screen in
-            switch screen {
-            case .chooseDateAndTime:
-                ChooseDateAndTimeScreen()
-            }
+                .navigationDestination(for: ChooseProcedureStackScreens.self) { screen in
+                    switch screen {
+                    case .chooseDateAndTime:
+                        ChooseDateAndTimeScreen()
+                    }
+                }
         }
     }
 }

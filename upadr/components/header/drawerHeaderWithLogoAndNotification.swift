@@ -30,6 +30,10 @@ struct DrawerHeaderWithLogoAndNotification: View {
                 .frame(width: 30, height: 30)
                 .fontWeight(.medium)
                 .foregroundStyle(.deepBlue)
+                .onTapGesture {
+                    appViewModel.selectedPreviousAppStack = appViewModel.selectedAppStack
+                    appViewModel.selectedAppStack = .notificationStack
+                }
         }
         .padding()
         .background(.lightSky)

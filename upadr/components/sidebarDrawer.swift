@@ -19,7 +19,7 @@ struct SidebarDrawer: View {
                     Spacer()
                     
                     Button {
-                        
+                        appViewModel.closeSidebarDrawer()
                     } label: {
                         Image(systemName: "xmark")
                             .resizable()
@@ -40,7 +40,8 @@ struct SidebarDrawer: View {
                     VStack(alignment: .leading) {
                         ForEach(AppStacks.allCases, id: \.self.rawValue) { item in
                             Button {
-                                
+                                appViewModel.selectedAppStack = item
+                                appViewModel.closeSidebarDrawer()
                             } label: {
                                 HStack(spacing: 15) {
                                     Image(systemName: item.icon)

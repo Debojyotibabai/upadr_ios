@@ -6,7 +6,9 @@ struct ProcedureParticularStepDetailsScreen: View {
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
-                DrawerHeaderWithLogoAndNotification()
+                BackHeaderWithLogoAndNotification(onBack: {
+                    appViewModel.procedureStackNavigationPath.removeLast()
+                })
                 
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .leading) {
@@ -37,15 +39,26 @@ struct ProcedureParticularStepDetailsScreen: View {
                 }
                 
                 VStack {
-                    SolidButton(text: "FAQ’s and Tips", width: geo.size.width * 0.75)
+                    SolidButton(text: "FAQ’s and Tips",
+                                width: geo.size.width * 0.75,
+                                onPress: {
+                        appViewModel.selectedAppStack = .tipStack
+                    })
                     
                     Spacer().frame(height: 10)
                     
-                    BorderedButton(text: "Prep For Another Procedure", foregroundColor: .deepSky, width: geo.size.width * 0.75)
+                    BorderedButton(text: "Prep For Another Procedure",
+                                   foregroundColor: .deepSky,
+                                   width: geo.size.width * 0.75,
+                                   onPress: {
+                        appViewModel.chooseProcedureStackNavigationPath = NavigationPath()
+                        appViewModel.selectedAppStack = .chooseProcedureStack
+                    })
                 }
                 .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .center)
             }
         }
+        .navigationBarBackButtonHidden()
     }
 }
 

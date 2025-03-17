@@ -3,6 +3,8 @@ import SwiftUI
 struct BackHeaderWithLogoAndNotification: View {
     @EnvironmentObject var appViewModel: AppViewModel
     
+    var onBack: () -> Void = {}
+    
     var body: some View {
         HStack {
             Image(systemName: "chevron.left")
@@ -11,6 +13,9 @@ struct BackHeaderWithLogoAndNotification: View {
                 .frame(width: 25, height: 25)
                 .fontWeight(.medium)
                 .foregroundStyle(.deepBlue)
+                .onTapGesture {
+                    onBack()
+                }
             
             Spacer()
             
@@ -27,6 +32,10 @@ struct BackHeaderWithLogoAndNotification: View {
                 .frame(width: 30, height: 30)
                 .fontWeight(.medium)
                 .foregroundStyle(.deepBlue)
+                .onTapGesture {
+                    appViewModel.selectedPreviousAppStack = appViewModel.selectedAppStack
+                    appViewModel.selectedAppStack = .notificationStack
+                }
         }
         .padding()
         .background(.lightSky)

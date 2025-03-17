@@ -8,7 +8,9 @@ struct ParticularProcedureFAqsAndTipsScreen: View {
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
-                BackHeaderWithLogoAndNotification()
+                BackHeaderWithLogoAndNotification(onBack: {
+                    appViewModel.tipStackNavigationPath.removeLast()
+                })
                 
                 VStack(alignment: .leading) {
                     Heading(text: "FAQs and Tips")
@@ -64,6 +66,7 @@ struct ParticularProcedureFAqsAndTipsScreen: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden()
     }
 }
 

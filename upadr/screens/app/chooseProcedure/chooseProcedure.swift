@@ -83,11 +83,16 @@ struct ChooseProcedureScreen: View {
                     .shadow(color: Color(.systemGray4), radius: 5, x: 0, y: 3)
                     .padding(.horizontal, 25)
                     .padding(.bottom, 10)
+                    .onTapGesture {
+                        appViewModel.selectedAppStack = .procedureStack
+                    }
                     
                     HStack {
                         Spacer()
                         
-                        SolidButton(text: "Next", width: geo.size.width * 0.5)
+                        SolidButton(text: "Next", width: geo.size.width * 0.5, onPress: {
+                            appViewModel.chooseProcedureStackNavigationPath.append(ChooseProcedureStackScreens.chooseDateAndTime)
+                        })
                     }
                     .padding(.horizontal, 25)
                 }

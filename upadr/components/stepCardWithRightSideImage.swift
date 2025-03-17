@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct StepCardWithRightSideImage: View {
+    var seeMoreOnPress: () -> Void = {}
+    
     var body: some View {
         HStack(spacing: 0) {
             VStack(alignment: .leading) {
@@ -24,6 +26,9 @@ struct StepCardWithRightSideImage: View {
                     .font(.system(size: 18, weight: .medium))
                     .foregroundColor(.deepSky)
                     .multilineTextAlignment(.leading)
+                    .onTapGesture {
+                        seeMoreOnPress()
+                    }
             }
             .padding(.leading, 25)
             .frame(minWidth: 0, maxWidth: Double.infinity, alignment: .leading)

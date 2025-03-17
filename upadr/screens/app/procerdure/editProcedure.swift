@@ -12,7 +12,9 @@ struct EditProcedureScreen: View {
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
-                BackHeaderWithLogoAndNotification()
+                BackHeaderWithLogoAndNotification(onBack: {
+                    appViewModel.procedureStackNavigationPath.removeLast()
+                })
                 
                 VStack(alignment: .leading) {
                     Heading(text: "Edit Your Procedure")
@@ -52,8 +54,9 @@ struct EditProcedureScreen: View {
                     Spacer()
                     
                     VStack {
-                        SolidButton(text: "Done")
-                            .frame(minWidth: 0, maxWidth: geo.size.width * 0.5)
+                        SolidButton(text: "Done", width: geo.size.width * 0.5, onPress: {
+                            appViewModel.procedureStackNavigationPath.removeLast()
+                        })
                     }
                     .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .trailing)
                 }
@@ -62,6 +65,7 @@ struct EditProcedureScreen: View {
                 .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .topLeading)
             }
         }
+        .navigationBarBackButtonHidden()
     }
 }
 
