@@ -40,6 +40,7 @@ struct SidebarDrawer: View {
                     VStack(alignment: .leading) {
                         ForEach(AppStacks.allCases, id: \.self.rawValue) { item in
                             Button {
+                                appViewModel.selectedPreviousAppStack = appViewModel.selectedAppStack
                                 appViewModel.selectedAppStack = item
                                 appViewModel.closeSidebarDrawer()
                             } label: {
