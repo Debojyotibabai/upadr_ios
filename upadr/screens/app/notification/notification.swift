@@ -1,10 +1,12 @@
 import SwiftUI
 
 struct NotificationScreen: View {
+    @EnvironmentObject var appViewModel: AppViewModel
+    
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
-                BackHeaderWithLogoWithoutNotification()
+                BackHeaderWithLogoWithoutNotification(appViewModel: appViewModel)
                 
                 Heading(text: "Notifications")
                     .padding(.horizontal, 25)
@@ -47,4 +49,5 @@ struct NotificationScreen: View {
 
 #Preview {
     NotificationScreen()
+        .environmentObject(AppViewModel())
 }

@@ -1,10 +1,12 @@
 import SwiftUI
 
 struct ProcedureParticularStepDetailsScreen: View {
+    @EnvironmentObject var appViewModel: AppViewModel
+    
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
-                DrawerHeaderWithLogoAndNotification()
+                DrawerHeaderWithLogoAndNotification(appViewModel: appViewModel)
                 
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .leading) {
@@ -50,4 +52,5 @@ struct ProcedureParticularStepDetailsScreen: View {
 
 #Preview {
     ProcedureParticularStepDetailsScreen()
+        .environmentObject(AppViewModel())
 }

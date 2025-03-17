@@ -20,6 +20,10 @@ struct AppMainStack: View {
             case .notificationStack:
                 NotificationStack()
             }
+            
+            if(appViewModel.isSidebarDrawerOpened) {
+                SidebarDrawer()
+            }
         }
     }
 }

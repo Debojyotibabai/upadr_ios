@@ -9,6 +9,16 @@ class AppViewModel: ObservableObject {
     @Published var notificationStackNavigationPath: NavigationPath = NavigationPath()
     
     @Published var selectedAppStack: AppStacks = .procedureStack
+    
+    @Published var isSidebarDrawerOpened: Bool = false
+    
+    func openSidebarDrawer() {
+        isSidebarDrawerOpened = true
+    }
+    
+    func closeSidebarDrawer() {
+        isSidebarDrawerOpened = false
+    }
 }
 
 enum AppStacks: Int, CaseIterable {

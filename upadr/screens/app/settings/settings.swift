@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct SettingsScreen: View {
+    @EnvironmentObject var appViewModel: AppViewModel
+    
     let settingsOptions: [String] = ["Terms and Conditions",
                                      "Privacy Policy",
                                      "Contact Us",
@@ -12,7 +14,7 @@ struct SettingsScreen: View {
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
-                DrawerHeaderWithLogoAndNotification()
+                DrawerHeaderWithLogoAndNotification(appViewModel: appViewModel)
                 
                 Heading(text: "Settings")
                     .padding(.horizontal, 25)
@@ -67,4 +69,5 @@ struct SettingsScreen: View {
 
 #Preview {
     SettingsScreen()
+        .environmentObject(AppViewModel())
 }

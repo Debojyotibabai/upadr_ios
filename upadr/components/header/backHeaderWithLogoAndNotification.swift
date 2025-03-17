@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct BackHeaderWithLogoAndNotification: View {
+    @ObservedObject var appViewModel: AppViewModel
+    
     var body: some View {
         HStack {
             Image(systemName: "chevron.left")
@@ -34,5 +36,5 @@ struct BackHeaderWithLogoAndNotification: View {
 
 
 #Preview {
-    BackHeaderWithLogoAndNotification()
+    BackHeaderWithLogoAndNotification(appViewModel: AppViewModel())
 }

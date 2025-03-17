@@ -1,10 +1,12 @@
 import SwiftUI
 
 struct MyProceduresScreen: View {
+    @EnvironmentObject var appViewModel: AppViewModel
+    
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
-                DrawerHeaderWithLogoAndNotification()
+                DrawerHeaderWithLogoAndNotification(appViewModel: appViewModel)
                 
                 Heading(text: "My Procedures")
                     .padding(.horizontal, 25)
@@ -96,4 +98,5 @@ struct MyProceduresScreen: View {
 
 #Preview {
     MyProceduresScreen()
+        .environmentObject(AppViewModel())
 }

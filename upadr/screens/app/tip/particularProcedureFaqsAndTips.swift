@@ -1,12 +1,14 @@
 import SwiftUI
 
 struct ParticularProcedureFAqsAndTipsScreen: View {
+    @EnvironmentObject var appViewModel: AppViewModel
+    
     @State var faqAndTipsData: [Bool] = [false, false, false, false, false]
     
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
-                BackHeaderWithLogoAndNotification()
+                BackHeaderWithLogoAndNotification(appViewModel: appViewModel)
                 
                 VStack(alignment: .leading) {
                     Heading(text: "FAQs and Tips")
@@ -14,7 +16,7 @@ struct ParticularProcedureFAqsAndTipsScreen: View {
                     Spacer().frame(height: 13)
                     
                     SubHeading(text: "Here are some FAQs and Tips for a Procedure 1",
-                                      foregroundColor: .gray3)
+                               foregroundColor: .gray3)
                 }
                 .padding(.horizontal, 25)
                 .padding(.vertical, 10)
@@ -68,4 +70,5 @@ struct ParticularProcedureFAqsAndTipsScreen: View {
 
 #Preview {
     ParticularProcedureFAqsAndTipsScreen()
+        .environmentObject(AppViewModel())
 }

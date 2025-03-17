@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct ChooseDateAndTimeScreen: View {
+    @EnvironmentObject var appViewModel: AppViewModel
+    
     @State var selectedDate: Date = Date()
     @State var showDatePicker: Bool = false
     
@@ -10,7 +12,7 @@ struct ChooseDateAndTimeScreen: View {
     var body: some View {
         GeometryReader { geo in
             VStack {
-                DrawerHeaderWithNotificationWithoutLogo()
+                DrawerHeaderWithNotificationWithoutLogo(appViewModel: appViewModel)
                 
                 VStack {
                     Image(.logoWithName)
@@ -76,4 +78,5 @@ struct ChooseDateAndTimeScreen: View {
 
 #Preview {
     ChooseDateAndTimeScreen()
+        .environmentObject(AppViewModel())
 }

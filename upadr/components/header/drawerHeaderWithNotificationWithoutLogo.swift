@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct DrawerHeaderWithNotificationWithoutLogo: View {
+    @ObservedObject var appViewModel: AppViewModel
+    
     var body: some View {
         HStack {
             Image(systemName: "line.3.horizontal")
@@ -26,5 +28,5 @@ struct DrawerHeaderWithNotificationWithoutLogo: View {
 
 
 #Preview {
-    DrawerHeaderWithNotificationWithoutLogo()
+    DrawerHeaderWithNotificationWithoutLogo(appViewModel: AppViewModel())
 }

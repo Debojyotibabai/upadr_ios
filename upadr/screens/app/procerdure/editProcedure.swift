@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct EditProcedureScreen: View {
+    @EnvironmentObject var appViewModel: AppViewModel
+    
     @State var selectedDate: Date = Date()
     @State var showDatePicker: Bool = false
     
@@ -10,7 +12,7 @@ struct EditProcedureScreen: View {
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
-                BackHeaderWithLogoAndNotification()
+                BackHeaderWithLogoAndNotification(appViewModel: appViewModel)
                 
                 VStack(alignment: .leading) {
                     Heading(text: "Edit Your Procedure")
@@ -66,4 +68,5 @@ struct EditProcedureScreen: View {
 
 #Preview {
     EditProcedureScreen()
+        .environmentObject(AppViewModel())
 }

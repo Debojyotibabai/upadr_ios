@@ -1,10 +1,12 @@
 import SwiftUI
 
 struct AllFaqsAndTipsScreen: View {
+    @EnvironmentObject var appViewModel: AppViewModel
+    
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
-                DrawerHeaderWithLogoAndNotification()
+                DrawerHeaderWithLogoAndNotification(appViewModel: appViewModel)
                 
                 Heading(text: "FAQs and Tips")
                     .padding(.horizontal, 25)
@@ -36,4 +38,5 @@ struct AllFaqsAndTipsScreen: View {
 
 #Preview {
     AllFaqsAndTipsScreen()
+        .environmentObject(AppViewModel())
 }

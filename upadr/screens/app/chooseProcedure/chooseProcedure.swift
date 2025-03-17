@@ -1,12 +1,14 @@
 import SwiftUI
 
 struct ChooseProcedureScreen: View {
+    @EnvironmentObject var appViewModel: AppViewModel
+    
     @State var selectedProcedure: Int?
     
     var body: some View {
         GeometryReader { geo in
             VStack {
-                DrawerHeaderWithNotificationWithoutLogo()
+                DrawerHeaderWithNotificationWithoutLogo(appViewModel: appViewModel)
                 
                 VStack {
                     Image(.logoWithName)
@@ -108,4 +110,5 @@ struct ChooseProcedureScreen: View {
 
 #Preview {
     ChooseProcedureScreen()
+        .environmentObject(AppViewModel())
 }

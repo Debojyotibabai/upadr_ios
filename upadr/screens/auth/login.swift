@@ -57,7 +57,9 @@ struct LoginScreen: View {
                         
                         HStack {
                             Spacer()
-                            SolidButton(text: "Log in", width: geo.size.width * 0.75)
+                            SolidButton(text: "Log in", width: geo.size.width * 0.75, onPress: {
+                                authViewModel.login()
+                            })
                             Spacer()
                         }
                         
