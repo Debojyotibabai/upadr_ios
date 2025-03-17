@@ -1,11 +1,16 @@
 import SwiftUI
 
 struct SidebarDrawer: View {
+    @EnvironmentObject var appViewModel: AppViewModel
+    
     var body: some View {
         ZStack(alignment: .leading) {
             Rectangle()
                 .ignoresSafeArea()
                 .foregroundStyle(.gray2.opacity(0.3))
+                .onTapGesture {
+                    appViewModel.closeSidebarDrawer()
+                }
             
             VStack {
                 Spacer().frame(height: 20)
@@ -81,4 +86,5 @@ struct SidebarDrawer: View {
 
 #Preview {
     SidebarDrawer()
+        .environmentObject(AppViewModel())
 }

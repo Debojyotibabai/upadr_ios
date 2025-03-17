@@ -6,7 +6,7 @@ struct SurveyScreen: View {
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
-                DrawerHeaderWithLogoAndNotification(appViewModel: appViewModel)
+                DrawerHeaderWithLogoAndNotification()
                 
                 VStack(alignment: .leading) {
                     Heading(text: "Survey")

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct BackHeaderWithLogoAndNotification: View {
-    @ObservedObject var appViewModel: AppViewModel
+    @EnvironmentObject var appViewModel: AppViewModel
     
     var body: some View {
         HStack {
@@ -36,5 +36,6 @@ struct BackHeaderWithLogoAndNotification: View {
 
 
 #Preview {
-    BackHeaderWithLogoAndNotification(appViewModel: AppViewModel())
+    BackHeaderWithLogoAndNotification()
+        .environmentObject(AppViewModel())
 }

@@ -6,7 +6,7 @@ struct AllFaqsAndTipsScreen: View {
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
-                DrawerHeaderWithLogoAndNotification(appViewModel: appViewModel)
+                DrawerHeaderWithLogoAndNotification()
                 
                 Heading(text: "FAQs and Tips")
                     .padding(.horizontal, 25)

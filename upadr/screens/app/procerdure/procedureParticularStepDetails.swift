@@ -6,7 +6,7 @@ struct ProcedureParticularStepDetailsScreen: View {
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
-                DrawerHeaderWithLogoAndNotification(appViewModel: appViewModel)
+                DrawerHeaderWithLogoAndNotification()
                 
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .leading) {

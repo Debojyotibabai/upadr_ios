@@ -12,7 +12,7 @@ struct EditProcedureScreen: View {
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
-                BackHeaderWithLogoAndNotification(appViewModel: appViewModel)
+                BackHeaderWithLogoAndNotification()
                 
                 VStack(alignment: .leading) {
                     Heading(text: "Edit Your Procedure")

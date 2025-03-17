@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct DrawerHeaderWithLogoAndNotification: View {
-    @ObservedObject var appViewModel: AppViewModel
+    @EnvironmentObject var appViewModel: AppViewModel
     
     var body: some View {
         HStack {
@@ -11,6 +11,9 @@ struct DrawerHeaderWithLogoAndNotification: View {
                 .frame(width: 30, height: 30)
                 .fontWeight(.medium)
                 .foregroundStyle(.deepBlue)
+                .onTapGesture {
+                    appViewModel.openSidebarDrawer()
+                }
             
             Spacer()
             
@@ -36,5 +39,6 @@ struct DrawerHeaderWithLogoAndNotification: View {
 
 
 #Preview {
-    DrawerHeaderWithLogoAndNotification(appViewModel: AppViewModel())
+    DrawerHeaderWithLogoAndNotification()
+        .environmentObject(AppViewModel())
 }

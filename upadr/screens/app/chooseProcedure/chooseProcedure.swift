@@ -8,7 +8,7 @@ struct ChooseProcedureScreen: View {
     var body: some View {
         GeometryReader { geo in
             VStack {
-                DrawerHeaderWithNotificationWithoutLogo(appViewModel: appViewModel)
+                DrawerHeaderWithNotificationWithoutLogo()
                 
                 VStack {
                     Image(.logoWithName)
