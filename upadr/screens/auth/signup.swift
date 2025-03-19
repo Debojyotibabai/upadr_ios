@@ -158,8 +158,11 @@ struct SignupScreen: View {
                    maxHeight: geo.size.height,
                    alignment: .top)
             .background(.lightSky)
-            .alert(signupViewModel.alertMessage, isPresented: $signupViewModel.isShowingAlertMessage) {
+            .alert(signupViewModel.signupData?.message ?? "", isPresented: $signupViewModel.isShowingAlertMessage) {
                 Button {
+                    if(signupViewModel.statusCode! < 400) {
+                        authViewModel.authNavigationPath.append(AuthScreens.verifyAccount)
+                    }
                     signupViewModel.hideAlertMessage()
                 } label: {
                     Text("Done")

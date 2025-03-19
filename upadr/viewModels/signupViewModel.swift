@@ -2,14 +2,15 @@ import SwiftUI
 
 class SignupViewModel: ObservableObject {
     @Published var isSignupLoading: Bool = false
-    @Published var alertMessage: String = ""
+    @Published var signupData: SignupWithEmailAndPasswordResponseModel?
     @Published var isShowingAlertMessage: Bool = false
+    @Published var statusCode: Int?
     
     private let signupURL = "https://dev-api.upadr.com/auth/register"
     
     func hideAlertMessage() {
         isShowingAlertMessage = false
-        alertMessage = ""
+        signupData = nil
     }
     
     
@@ -49,25 +50,21 @@ class SignupViewModel: ObservableObject {
                 return
             }
             
-            let statusCode = httpResponse.statusCode
-            print("Response status code: \(statusCode)")
-            
             if let responseString = String(data: data, encoding: .utf8) {
                 print("Raw Response: \(responseString)")
                 do {
                     let response = try JSONDecoder().decode(SignupWithEmailAndPasswordResponseModel.self, from: data)
-                    print("Message from server: \(response.message)")
-                    
                     await MainActor.run {
                         isSignupLoading = false
-                        alertMessage = response.message
+                        signupData = response
                         isShowingAlertMessage = true
+                        statusCode = httpResponse.statusCode
                     }
                 } catch {
                     print("JSON decoding error: \(error.localizedDescription)")
                     await MainActor.run {
                         isSignupLoading = false
-                        alertMessage = "Registration completed, but couldn't parse server message"
+                        signupData = SignupWithEmailAndPasswordResponseModel(message: "Registration completed, but couldn't parse server message")
                         isShowingAlertMessage = true
                     }
                 }
@@ -81,7 +78,7 @@ class SignupViewModel: ObservableObject {
             print("Signup failed: \(error.localizedDescription)")
             await MainActor.run {
                 isSignupLoading = false
-                alertMessage = "Failed to register"
+                signupData = SignupWithEmailAndPasswordResponseModel(message: "Failed to register")
                 isShowingAlertMessage = true
             }
         }
