@@ -1,41 +1,29 @@
 import SwiftUI
 
+@MainActor
 class SignupViewModel: ObservableObject {
     @Published var isSignupLoading: Bool = false
     @Published var signupData: SignupWithEmailAndPasswordResponseModel?
     @Published var isShowingAlertMessage: Bool = false
     @Published var statusCode: Int?
     
-    private let signupURL = "https://dev-api.upadr.com/auth/register"
+    private let signupURL = URL(string: "https://dev-api.upadr.com/auth/register")!
     
     func hideAlertMessage() {
         isShowingAlertMessage = false
         signupData = nil
     }
     
-    
     func signupWithEmailAndPassword(signupWithEmailPasswordModel: SignupWithEmailAndPasswordModel) async {
-        await MainActor.run {
-            isSignupLoading = true
-        }
-        
-        guard let url = URL(string: signupURL) else {
-            print("Invalid URL")
-            await MainActor.run {
-                isSignupLoading = false
-            }
-            return
-        }
+        isSignupLoading = true
         
         guard let jsonData = try? JSONEncoder().encode(signupWithEmailPasswordModel) else {
             print("Failed to encode")
-            await MainActor.run {
-                isSignupLoading = false
-            }
+            isSignupLoading = false
             return
         }
         
-        var request = URLRequest(url: url)
+        var request = URLRequest(url: signupURL)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
@@ -44,43 +32,34 @@ class SignupViewModel: ObservableObject {
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 print("Invalid response type")
-                await MainActor.run {
-                    isSignupLoading = false
-                }
+                isSignupLoading = false
                 return
             }
             
-            if let responseString = String(data: data, encoding: .utf8) {
-                print("Raw Response: \(responseString)")
-                do {
+            do {
+                if((200...399).contains(httpResponse.statusCode)) {
                     let response = try JSONDecoder().decode(SignupWithEmailAndPasswordResponseModel.self, from: data)
-                    await MainActor.run {
-                        isSignupLoading = false
-                        signupData = response
-                        isShowingAlertMessage = true
-                        statusCode = httpResponse.statusCode
-                    }
-                } catch {
-                    print("JSON decoding error: \(error.localizedDescription)")
-                    await MainActor.run {
-                        isSignupLoading = false
-                        signupData = SignupWithEmailAndPasswordResponseModel(message: "Registration completed, but couldn't parse server message")
-                        isShowingAlertMessage = true
-                    }
+                    print("Success response: \(response)")
+                    signupData = response
+                } else {
+                    let error = try JSONDecoder().decode(SignupWithEmailAndPasswordResponseModel.self, from: data)
+                    print("Error response: \(error)")
+                    signupData = error
                 }
-            } else {
-                print("Failed to encode")
-                await MainActor.run {
-                    isSignupLoading = false
-                }
+                isSignupLoading = false
+                statusCode = httpResponse.statusCode
+                isShowingAlertMessage = true
+            } catch {
+                print("JSON decoding error: \(error.localizedDescription)")
+                isSignupLoading = false
+                signupData = SignupWithEmailAndPasswordResponseModel(message: "Registration completed, but couldn't parse server message")
+                isShowingAlertMessage = true
             }
         } catch {
             print("Signup failed: \(error.localizedDescription)")
-            await MainActor.run {
-                isSignupLoading = false
-                signupData = SignupWithEmailAndPasswordResponseModel(message: "Failed to register")
-                isShowingAlertMessage = true
-            }
+            isSignupLoading = false
+            signupData = SignupWithEmailAndPasswordResponseModel(message: "Failed to register")
+            isShowingAlertMessage = true
         }
     }
 }
