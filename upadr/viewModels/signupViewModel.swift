@@ -3,15 +3,35 @@ import SwiftUI
 @MainActor
 class SignupViewModel: ObservableObject {
     @Published var isSignupLoading: Bool = false
-    @Published var signupData: SignupWithEmailAndPasswordResponseModel?
-    @Published var isShowingAlertMessage: Bool = false
-    @Published var statusCode: Int?
+    @Published var isError: Bool = false
+    @Published var isSuccess: Bool = false
+    @Published var signupResponseData: SignupWithEmailAndPasswordResponseModel?
+    @Published var signupErrorData: SignupWithEmailAndPasswordResponseModel?
     
     private let signupURL = URL(string: "https://dev-api.upadr.com/auth/register")!
     
-    func hideAlertMessage() {
-        isShowingAlertMessage = false
-        signupData = nil
+    func resetSignupViewModel() {
+        isSignupLoading = false
+        isError = false
+        isSuccess = false
+        signupResponseData = nil
+        signupErrorData = nil
+    }
+    
+    func setResponseData(data: SignupWithEmailAndPasswordResponseModel) {
+        isSignupLoading = false
+        isSuccess = true
+        signupResponseData = data
+        isError = false
+        signupErrorData = nil
+    }
+    
+    func setErrorData(data: SignupWithEmailAndPasswordResponseModel) {
+        isSignupLoading = false
+        isError = true
+        signupErrorData = data
+        isSuccess = false
+        signupResponseData = nil
     }
     
     func signupWithEmailAndPassword(signupWithEmailPasswordModel: SignupWithEmailAndPasswordModel) async {
@@ -40,26 +60,19 @@ class SignupViewModel: ObservableObject {
                 if((200...399).contains(httpResponse.statusCode)) {
                     let response = try JSONDecoder().decode(SignupWithEmailAndPasswordResponseModel.self, from: data)
                     print("Success response: \(response)")
-                    signupData = response
+                    setResponseData(data: response)
                 } else {
                     let error = try JSONDecoder().decode(SignupWithEmailAndPasswordResponseModel.self, from: data)
                     print("Error response: \(error)")
-                    signupData = error
+                    setErrorData(data: error)
                 }
-                isSignupLoading = false
-                statusCode = httpResponse.statusCode
-                isShowingAlertMessage = true
             } catch {
                 print("JSON decoding error: \(error.localizedDescription)")
-                isSignupLoading = false
-                signupData = SignupWithEmailAndPasswordResponseModel(message: "Registration completed, but couldn't parse server message")
-                isShowingAlertMessage = true
+                setErrorData(data: SignupWithEmailAndPasswordResponseModel(message: "Registration completed, but couldn't parse server message"))
             }
         } catch {
             print("Signup failed: \(error.localizedDescription)")
-            isSignupLoading = false
-            signupData = SignupWithEmailAndPasswordResponseModel(message: "Failed to register")
-            isShowingAlertMessage = true
+            setErrorData(data: SignupWithEmailAndPasswordResponseModel(message: "Failed to register"))
         }
     }
 }

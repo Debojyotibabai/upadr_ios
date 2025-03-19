@@ -158,16 +158,23 @@ struct SignupScreen: View {
                    maxHeight: geo.size.height,
                    alignment: .top)
             .background(.lightSky)
-            .alert(signupViewModel.signupData?.message ?? "", isPresented: $signupViewModel.isShowingAlertMessage) {
+            .alert(signupViewModel.signupResponseData?.message ?? "",
+                   isPresented: $signupViewModel.isSuccess) {
                 Button {
-                    if(signupViewModel.statusCode! < 400) {
-                        authViewModel.authNavigationPath.append(AuthScreens.verifyAccount)
-                    }
-                    signupViewModel.hideAlertMessage()
+                    authViewModel.authNavigationPath.append(AuthScreens.verifyAccount)
+                    signupViewModel.resetSignupViewModel()
                 } label: {
-                    Text("Done")
+                    Text("Verify Email")
                 }
             }
+                   .alert(signupViewModel.signupErrorData?.message ?? "",
+                          isPresented: $signupViewModel.isError) {
+                       Button {
+                           signupViewModel.resetSignupViewModel()
+                       } label: {
+                           Text("Okay")
+                       }
+                   }
         }
     }
 }
