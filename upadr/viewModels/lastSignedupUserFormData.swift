@@ -1,5 +1,5 @@
 import SwiftUI
 
-class LastSignedupUserFormData: ObservableObject {
-    @Published var lastSignedupUser: SignupWithEmailAndPasswordModel?
+class LastSignedupUser: ObservableObject {
+    @Published var lastSignedupUserFormData: SignupWithEmailAndPasswordModel?
 }
