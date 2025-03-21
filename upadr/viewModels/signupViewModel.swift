@@ -68,7 +68,6 @@ class SignupViewModel: ObservableObject {
                 }
             } catch {
                 print("JSON decoding error: \(error.localizedDescription)")
-                setErrorData(data: SignupWithEmailAndPasswordResponseModel(message: "Registration completed, but couldn't parse server message"))
             }
         } catch {
             print("Signup failed: \(error.localizedDescription)")

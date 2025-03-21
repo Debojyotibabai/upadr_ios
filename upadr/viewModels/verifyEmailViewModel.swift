@@ -68,11 +68,10 @@ class VerifyEmailViewModel: ObservableObject {
                 }
             } catch {
                 print("JSON decoding error: \(error.localizedDescription)")
-                setErrorData(data: VerifyEmailResponseModel(message: "OTP verification completed, but couldn't parse server message"))
             }
         } catch {
             print("Otp verification failed: \(error.localizedDescription)")
-            setErrorData(data: VerifyEmailResponseModel(message: "Failed to otp verification"))
+            setErrorData(data: VerifyEmailResponseModel(message: "Failed to OTP verification"))
         }
     }
 }
