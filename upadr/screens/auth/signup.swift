@@ -2,8 +2,7 @@ import SwiftUI
 
 struct SignupScreen: View {
     @EnvironmentObject var authViewModel: AuthViewModel
-    
-    @StateObject var signupViewModel: SignupViewModel = SignupViewModel()
+    @EnvironmentObject var signupViewModel: SignupViewModel
     
     @State var firstName:String = ""
     @State var lastName:String = ""
@@ -158,28 +157,29 @@ struct SignupScreen: View {
                    maxHeight: geo.size.height,
                    alignment: .top)
             .background(.lightSky)
-            .alert(signupViewModel.signupResponseData?.message ?? "",
-                   isPresented: $signupViewModel.isSuccess) {
-                Button {
-                    authViewModel.authNavigationPath.append(AuthScreens.verifyAccount)
-                    signupViewModel.resetSignupViewModel()
-                } label: {
-                    Text("Verify Email")
-                }
-            }
-                   .alert(signupViewModel.signupErrorData?.message ?? "",
-                          isPresented: $signupViewModel.isError) {
-                       Button {
-                           signupViewModel.resetSignupViewModel()
-                       } label: {
-                           Text("Okay")
-                       }
-                   }
         }
+        .alert(signupViewModel.signupResponseData?.message ?? "",
+               isPresented: $signupViewModel.isSuccess) {
+            Button {
+                authViewModel.authNavigationPath.append(AuthScreens.verifyAccount)
+                signupViewModel.resetSignupViewModel()
+            } label: {
+                Text("Verify Email")
+            }
+        }
+               .alert(signupViewModel.signupErrorData?.message ?? "",
+                      isPresented: $signupViewModel.isError) {
+                   Button {
+                       signupViewModel.resetSignupViewModel()
+                   } label: {
+                       Text("Okay")
+                   }
+               }
     }
 }
 
 #Preview {
     SignupScreen()
         .environmentObject(AuthViewModel())
+        .environmentObject(SignupViewModel())
 }
