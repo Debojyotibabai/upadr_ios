@@ -2,6 +2,7 @@ import SwiftUI
 
 struct VerifyAccountScreen: View {
     @StateObject var signupViewModel: SignupViewModel = SignupViewModel()
+    @StateObject var verifyEmailViewModel: VerifyEmailViewModel = VerifyEmailViewModel()
     
     @EnvironmentObject var authViewModel: AuthViewModel
     @EnvironmentObject var lastSignedupUser: LastSignedupUser
@@ -31,6 +32,21 @@ struct VerifyAccountScreen: View {
     
     func resendOtp() async {
         await signupViewModel.signupWithEmailAndPassword(signupWithEmailPasswordModel: lastSignedupUser.lastSignedupUserFormData!)
+    }
+    
+    func verifyEmail() async {
+        guard let userData = lastSignedupUser.lastSignedupUserFormData else {
+            print("No user data available")
+            return
+        }
+        
+        let verifyModel = VerifyEmailModel(
+            ConfirmationCode: otp.joined(),
+            emailAddress: userData.emailAddress,
+            password: userData.password
+        )
+        
+        await verifyEmailViewModel.verifyEmail(verifyEmailModel: verifyModel)
     }
     
     var body: some View {
@@ -92,10 +108,15 @@ struct VerifyAccountScreen: View {
                 
                 Spacer()
                 
-                SolidButton(text: "Verify", width: geo.size.width * 0.75, onPress: {
-                    authViewModel.authNavigationPath = NavigationPath()
-                    authViewModel.authNavigationPath.append(AuthScreens.login)
-                })
+                SolidButton(text: "Verify",
+                            width: geo.size.width * 0.75,
+                            onPress: {
+                    Task {
+                        await verifyEmail()
+                    }
+                },
+                            isDisabled: otp.joined().count < 6,
+                            isLoading: verifyEmailViewModel.isVerifyEmailLoading)
                 
                 Spacer().frame(height: 25)
                 
@@ -129,6 +150,24 @@ struct VerifyAccountScreen: View {
                        Text("Okay")
                    }
                }
+                      .alert(verifyEmailViewModel.verifyEmailResponseData?.message ?? "OTP verification successfully",
+                             isPresented: $verifyEmailViewModel.isSuccess) {
+                          Button {
+                              authViewModel.authNavigationPath = NavigationPath()
+                              authViewModel.authNavigationPath.append(AuthScreens.login)
+                              verifyEmailViewModel.resetVerifyEmailViewModel()
+                          } label: {
+                              Text("Go to Login")
+                          }
+                      }
+                             .alert(verifyEmailViewModel.verifyEmailErrorData?.message ?? "Something went wrong",
+                                    isPresented: $verifyEmailViewModel.isError) {
+                                 Button {
+                                     verifyEmailViewModel.resetVerifyEmailViewModel()
+                                 } label: {
+                                     Text("Okay")
+                                 }
+                             }
     }
 }
 

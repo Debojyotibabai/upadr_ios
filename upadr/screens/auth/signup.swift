@@ -164,7 +164,7 @@ struct SignupScreen: View {
                    alignment: .top)
             .background(.lightSky)
         }
-        .alert(signupViewModel.signupResponseData?.message ?? "",
+        .alert(signupViewModel.signupResponseData?.message ?? "Signed up successfully",
                isPresented: $signupViewModel.isSuccess) {
             Button {
                 authViewModel.authNavigationPath.append(AuthScreens.verifyAccount)
@@ -173,7 +173,7 @@ struct SignupScreen: View {
                 Text("Verify Email")
             }
         }
-               .alert(signupViewModel.signupErrorData?.message ?? "",
+               .alert(signupViewModel.signupErrorData?.message ?? "Something went wrong",
                       isPresented: $signupViewModel.isError) {
                    Button {
                        signupViewModel.resetSignupViewModel()

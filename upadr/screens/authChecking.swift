@@ -20,7 +20,5 @@ struct AuthChecking: View {
 }
 
 #Preview {
-    AuthChecking(authVieModel: AuthViewModel(),
-                 appVieModel: AppViewModel(),
-                 lastSignedupUser: LastSignedupUser())
+    AuthChecking()
 }
