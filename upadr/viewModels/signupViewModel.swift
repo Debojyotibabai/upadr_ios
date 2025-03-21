@@ -8,8 +8,6 @@ class SignupViewModel: ObservableObject {
     @Published var signupResponseData: SignupWithEmailAndPasswordResponseModel?
     @Published var signupErrorData: SignupWithEmailAndPasswordResponseModel?
     
-    @Published var lastSignedupUserData: SignupWithEmailAndPasswordModel?
-    
     private let signupURL = URL(string: "https://dev-api.upadr.com/auth/register")!
     
     func resetSignupViewModel() {
@@ -38,8 +36,6 @@ class SignupViewModel: ObservableObject {
     
     func signupWithEmailAndPassword(signupWithEmailPasswordModel: SignupWithEmailAndPasswordModel) async {
         isSignupLoading = true
-        
-        lastSignedupUserData = signupWithEmailPasswordModel
         
         guard let jsonData = try? JSONEncoder().encode(signupWithEmailPasswordModel) else {
             print("Failed to encode")

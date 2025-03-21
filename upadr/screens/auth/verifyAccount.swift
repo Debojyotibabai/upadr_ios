@@ -1,8 +1,10 @@
 import SwiftUI
 
 struct VerifyAccountScreen: View {
+    @StateObject var signupViewModel: SignupViewModel = SignupViewModel()
+    
     @EnvironmentObject var authViewModel: AuthViewModel
-    @EnvironmentObject var signupViewModel: SignupViewModel
+    @EnvironmentObject var lastSignedupUserFormData: LastSignedupUserFormData
     
     @State var otp: [String] = Array(repeating: "", count: 6)
     @FocusState var focusedField: Int?
@@ -28,7 +30,7 @@ struct VerifyAccountScreen: View {
     }
     
     func resendOtp() async {
-        await signupViewModel.signupWithEmailAndPassword(signupWithEmailPasswordModel: signupViewModel.lastSignedupUserData!)
+        await signupViewModel.signupWithEmailAndPassword(signupWithEmailPasswordModel: lastSignedupUserFormData.lastSignedupUser!)
     }
     
     var body: some View {
@@ -59,7 +61,7 @@ struct VerifyAccountScreen: View {
                     
                     Spacer().frame(height: 13)
                     
-                    SubHeading(text: "Please enter the 6 digit code sent to \(signupViewModel.lastSignedupUserData?.emailAddress ?? "your email")",
+                    SubHeading(text: "Please enter the 6 digit code sent to \(lastSignedupUserFormData.lastSignedupUser?.emailAddress ?? "your email")",
                                foregroundColor: .gray1)
                 }
                 .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .leading)
@@ -133,5 +135,5 @@ struct VerifyAccountScreen: View {
 #Preview {
     VerifyAccountScreen()
         .environmentObject(AuthViewModel())
-        .environmentObject(SignupViewModel())
+        .environmentObject(LastSignedupUserFormData())
 }

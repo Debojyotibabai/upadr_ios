@@ -1,8 +1,10 @@
 import SwiftUI
 
 struct SignupScreen: View {
+    @StateObject var signupViewModel: SignupViewModel = SignupViewModel()
+    
     @EnvironmentObject var authViewModel: AuthViewModel
-    @EnvironmentObject var signupViewModel: SignupViewModel
+    @EnvironmentObject var lastSignedupUserFormData: LastSignedupUserFormData
     
     @State var firstName:String = ""
     @State var lastName:String = ""
@@ -25,7 +27,11 @@ struct SignupScreen: View {
     }
     
     func signupWithEmailAndPassword() async {
-        await signupViewModel.signupWithEmailAndPassword(signupWithEmailPasswordModel: SignupWithEmailAndPasswordModel(confirmPassword: confirmPassword, emailAddress: emailAddress, firstName: firstName, lastName: lastName, password: password))
+        let data = SignupWithEmailAndPasswordModel(confirmPassword: confirmPassword, emailAddress: emailAddress, firstName: firstName, lastName: lastName, password: password)
+        
+        await signupViewModel.signupWithEmailAndPassword(signupWithEmailPasswordModel: data)
+        
+        lastSignedupUserFormData.lastSignedupUser = data
     }
     
     var body: some View {
@@ -181,5 +187,5 @@ struct SignupScreen: View {
 #Preview {
     SignupScreen()
         .environmentObject(AuthViewModel())
-        .environmentObject(SignupViewModel())
+        .environmentObject(LastSignedupUserFormData())
 }
