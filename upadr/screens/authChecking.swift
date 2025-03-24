@@ -4,7 +4,7 @@ struct AuthChecking: View {
     @StateObject var authVieModel: AuthViewModel = AuthViewModel()
     @StateObject var appVieModel: AppViewModel = AppViewModel()
     
-    @StateObject var lastSignedupUser: LastSignedupUser = LastSignedupUser()
+    @StateObject var authUSer: AuthUser = AuthUser()
     
     var body: some View {
         if(authVieModel.isLoggedIn) {
@@ -14,7 +14,7 @@ struct AuthChecking: View {
         } else {
             WelcomeScreen()
                 .environmentObject(authVieModel)
-                .environmentObject(lastSignedupUser)
+                .environmentObject(authUSer)
         }
     }
 }

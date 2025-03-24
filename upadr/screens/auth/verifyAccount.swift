@@ -5,7 +5,7 @@ struct VerifyAccountScreen: View {
     @StateObject var verifyEmailViewModel: VerifyEmailViewModel = VerifyEmailViewModel()
     
     @EnvironmentObject var authViewModel: AuthViewModel
-    @EnvironmentObject var lastSignedupUser: LastSignedupUser
+    @EnvironmentObject var authUser: AuthUser
     
     @State var otp: [String] = Array(repeating: "", count: 6)
     @FocusState var focusedField: Int?
@@ -31,11 +31,11 @@ struct VerifyAccountScreen: View {
     }
     
     func resendOtp() async {
-        await signupViewModel.signupWithEmailAndPassword(signupWithEmailPasswordModel: lastSignedupUser.lastSignedupUserFormData!)
+        await signupViewModel.signupWithEmailAndPassword(signupWithEmailPasswordModel: authUser.lastSignedupUserFormData!)
     }
     
     func verifyEmail() async {
-        guard let userData = lastSignedupUser.lastSignedupUserFormData else {
+        guard let userData = authUser.lastSignedupUserFormData else {
             print("No user data available")
             return
         }
@@ -77,7 +77,7 @@ struct VerifyAccountScreen: View {
                     
                     Spacer().frame(height: 13)
                     
-                    SubHeading(text: "Please enter the 6 digit code sent to \(lastSignedupUser.lastSignedupUserFormData?.emailAddress ?? "your email")",
+                    SubHeading(text: "Please enter the 6 digit code sent to \(authUser.lastSignedupUserFormData?.emailAddress ?? "your email")",
                                foregroundColor: .gray1)
                 }
                 .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .leading)
@@ -174,5 +174,5 @@ struct VerifyAccountScreen: View {
 #Preview {
     VerifyAccountScreen()
         .environmentObject(AuthViewModel())
-        .environmentObject(LastSignedupUser())
+        .environmentObject(AuthUser())
 }
