@@ -2,19 +2,19 @@ import SwiftUI
 
 struct AuthChecking: View {
     @StateObject var authVieModel: AuthViewModel = AuthViewModel()
-    @StateObject var appVieModel: AppViewModel = AppViewModel()
+    @StateObject var appViewModel: AppViewModel = AppViewModel()
     
-    @StateObject var authUSer: AuthUser = AuthUser()
+    @StateObject var authUserViewModel: AuthUserViewModel = AuthUserViewModel()
     
     var body: some View {
         if(authVieModel.isLoggedIn) {
             AppMainStack()
                 .environmentObject(authVieModel)
-                .environmentObject(appVieModel)
+                .environmentObject(appViewModel)
         } else {
             WelcomeScreen()
                 .environmentObject(authVieModel)
-                .environmentObject(authUSer)
+                .environmentObject(authUserViewModel)
         }
     }
 }

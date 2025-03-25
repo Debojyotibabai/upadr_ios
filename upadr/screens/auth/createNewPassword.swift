@@ -1,13 +1,24 @@
 import SwiftUI
 
 struct CreateNewPasswordScreen: View {
+    @StateObject var forgotPasswordViewModel: ForgotPasswordViewModel = ForgotPasswordViewModel()
+    @StateObject var createNewPasswordViewModel: CreateNewPasswordViewModel = CreateNewPasswordViewModel()
+    
     @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var authUserViewModel: AuthUserViewModel
     
     @State var otp: [String] = Array(repeating: "", count: 6)
     @FocusState var focusedField: Int?
     
     @State var password:String = ""
     @State var confirmPassword:String = ""
+    
+    @State var isPasswordValid: Bool = false
+    @State var isConfirmPasswordValid: Bool = false
+    
+    var isFormValid: Bool {
+        return otp.joined().count == 6 && isPasswordValid && isConfirmPasswordValid
+    }
     
     func handleInputChange(_ newValue: String, _ index: Int) {
         // Limit to one character
@@ -27,6 +38,22 @@ struct CreateNewPasswordScreen: View {
                 focusedField = index - 1 // Move focus back on delete
             }
         }
+    }
+    
+    func resendOtp() async {
+        await forgotPasswordViewModel.forgotPassword(forgotPasswordModel: authUserViewModel.lastForgotPasswordFormData!)
+    }
+    
+    func resetPassword() async {
+        guard let emailAddress = authUserViewModel.lastForgotPasswordFormData?.emailAddress else {
+            return
+        }
+        
+        await createNewPasswordViewModel.createNewPAssword(createNewPasswordModel:
+                                                            CreateNewPasswordModel(confirmPassword: confirmPassword,
+                                                                                   emailAddress: emailAddress,
+                                                                                   newPassword: password,
+                                                                                   resetCode: otp.joined()))
     }
     
     var body: some View {
@@ -58,7 +85,7 @@ struct CreateNewPasswordScreen: View {
                         
                         Spacer().frame(height: 13)
                         
-                        SubHeading(text: "Please enter the 6 digit code sent to email@example.com",
+                        SubHeading(text: "Please enter the 6 digit code sent to \(authUserViewModel.lastForgotPasswordFormData?.emailAddress ?? "your email")",
                                    foregroundColor: .gray1)
                     }
                     .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .leading)
@@ -79,6 +106,12 @@ struct CreateNewPasswordScreen: View {
                         Text("Resend")
                             .font(.system(size: 18, weight: .medium))
                             .foregroundColor(.deepSky)
+                            .onTapGesture {
+                                Task {
+                                    await resendOtp()
+                                }
+                            }
+                            .disabled(forgotPasswordViewModel.isForgotPasswordLoading)
                     }
                     
                     Spacer().frame(height: 40)
@@ -90,12 +123,23 @@ struct CreateNewPasswordScreen: View {
                         Spacer().frame(height: 30)
                         
                         InputLabel(text: "Password")
-                        PasswordInputWithoutLabel(placeholder: "password", text: $password)
+                        PasswordInputWithoutLabel(placeholder: "password",
+                                                  text: $password,
+                                                  errorMessage: isPasswordValid ? "" : "Password must be 8+ chars, include a letter & number")
+                        .onChange(of: password) { oldValue, newValue in
+                            isPasswordValid = NSPredicate(format: "SELF MATCHES %@", "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>])[A-Za-z\\d!@#$%^&*(),.?\":{}|<>]{8,}$").evaluate(with: newValue)
+                            isConfirmPasswordValid = confirmPassword == newValue
+                        }
                         
                         Spacer().frame(height: 20)
                         
                         InputLabel(text: "Confirm Password")
-                        PasswordInputWithoutLabel(placeholder: "confirm password", text: $confirmPassword)
+                        PasswordInputWithoutLabel(placeholder: "confirm password",
+                                                  text: $confirmPassword,
+                                                  errorMessage: isConfirmPasswordValid ? "" : "Passwords must match")
+                        .onChange(of: confirmPassword) { oldValue, newValue in
+                            isConfirmPasswordValid = password == newValue
+                        }
                     }
                     .frame(minWidth: 0,
                            maxWidth: geo.size.width)
@@ -103,9 +147,12 @@ struct CreateNewPasswordScreen: View {
                     Spacer().frame(height: 50)
                     
                     SolidButton(text: "Confirm", width: geo.size.width * 0.75, onPress: {
-                        authViewModel.authNavigationPath = NavigationPath()
-                        authViewModel.authNavigationPath.append(AuthScreens.login)
-                    })
+                        Task {
+                            await resetPassword()
+                        }
+                    },
+                                isDisabled: !isFormValid,
+                                isLoading: createNewPasswordViewModel.isCreateNewPasswordLoading)
                     
                     Spacer().frame(height: 10)
                 }
@@ -117,6 +164,40 @@ struct CreateNewPasswordScreen: View {
                    alignment: .topLeading)
             .padding(.horizontal, 25)
             .padding(.top, 25)
+            .alert(forgotPasswordViewModel.forgotPasswordErrorData?.message ?? "Something went wrong",
+                   isPresented: $forgotPasswordViewModel.isError) {
+                Button {
+                    forgotPasswordViewModel.resetForgotPasswordViewModel()
+                } label: {
+                    Text("Okay")
+                }
+            }
+                   .alert(forgotPasswordViewModel.forgotPasswordResponseData?.message ?? "OTP has been sent successfully",
+                          isPresented: $forgotPasswordViewModel.isSuccess) {
+                       Button {
+                           forgotPasswordViewModel.resetForgotPasswordViewModel()
+                       } label: {
+                           Text("Okay")
+                       }
+                   }
+                          .alert(createNewPasswordViewModel.createNewPasswordErrorData?.message ?? "Something went wrong",
+                                 isPresented: $createNewPasswordViewModel.isError) {
+                              Button {
+                                  createNewPasswordViewModel.resetCreateNewPasswordViewModel()
+                              } label: {
+                                  Text("Okay")
+                              }
+                          }
+                                 .alert(createNewPasswordViewModel.createNewPasswordResponseData?.message ?? "Password reset successfully",
+                                        isPresented: $createNewPasswordViewModel.isSuccess) {
+                                     Button {
+                                         createNewPasswordViewModel.resetCreateNewPasswordViewModel()
+                                         authViewModel.authNavigationPath = NavigationPath()
+                                         authViewModel.authNavigationPath.append(AuthScreens.login)
+                                     } label: {
+                                         Text("Go to Login")
+                                     }
+                                 }
         }
     }
 }
@@ -124,4 +205,5 @@ struct CreateNewPasswordScreen: View {
 #Preview {
     CreateNewPasswordScreen()
         .environmentObject(AuthViewModel())
+        .environmentObject(AuthUserViewModel())
 }

@@ -4,7 +4,7 @@ struct SignupScreen: View {
     @StateObject var signupViewModel: SignupViewModel = SignupViewModel()
     
     @EnvironmentObject var authViewModel: AuthViewModel
-    @EnvironmentObject var authUser: AuthUser
+    @EnvironmentObject var authUserViewModel: AuthUserViewModel
     
     @State var firstName:String = ""
     @State var lastName:String = ""
@@ -31,7 +31,7 @@ struct SignupScreen: View {
         
         await signupViewModel.signupWithEmailAndPassword(signupWithEmailPasswordModel: data)
         
-        authUser.lastSignedupUserFormData = data
+        authUserViewModel.lastSignedupUserFormData = data
     }
     
     var body: some View {
@@ -187,5 +187,5 @@ struct SignupScreen: View {
 #Preview {
     SignupScreen()
         .environmentObject(AuthViewModel())
-        .environmentObject(AuthUser())
+        .environmentObject(AuthUserViewModel())
 }

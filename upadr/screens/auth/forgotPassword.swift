@@ -4,7 +4,7 @@ struct ForgotPasswordScreen: View {
     @StateObject var forgotPasswordViewModel: ForgotPasswordViewModel = ForgotPasswordViewModel()
     
     @EnvironmentObject var authViewModel: AuthViewModel
-    @EnvironmentObject var authUser: AuthUser
+    @EnvironmentObject var authUserViewModel: AuthUserViewModel
     
     @State var emailAddress: String = ""
     
@@ -15,12 +15,12 @@ struct ForgotPasswordScreen: View {
     }
     
     func forgotPassword() async {
-        await forgotPasswordViewModel.forgotPassword(forgotPasswordModel:
-                                                        ForgotPasswordModel(emailAddress:
-                                                                                emailAddress))
+        let forgotPasswordModel: ForgotPasswordModel = ForgotPasswordModel(emailAddress: emailAddress)
+        
+        await forgotPasswordViewModel.forgotPassword(forgotPasswordModel: forgotPasswordModel)
         
         if(forgotPasswordViewModel.isSuccess) {
-            authUser.forgotPasswordEmailAddress = emailAddress
+            authUserViewModel.lastForgotPasswordFormData = forgotPasswordModel
             authViewModel.authNavigationPath.append(AuthScreens.createNewPassword)
         }
     }
@@ -98,5 +98,5 @@ struct ForgotPasswordScreen: View {
 #Preview {
     ForgotPasswordScreen()
         .environmentObject(AuthViewModel())
-        .environmentObject(AuthUser())
+        .environmentObject(AuthUserViewModel())
 }

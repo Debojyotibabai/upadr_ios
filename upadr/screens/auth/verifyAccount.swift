@@ -5,7 +5,7 @@ struct VerifyAccountScreen: View {
     @StateObject var verifyEmailViewModel: VerifyEmailViewModel = VerifyEmailViewModel()
     
     @EnvironmentObject var authViewModel: AuthViewModel
-    @EnvironmentObject var authUser: AuthUser
+    @EnvironmentObject var authUserViewModel: AuthUserViewModel
     
     @State var otp: [String] = Array(repeating: "", count: 6)
     @FocusState var focusedField: Int?
@@ -31,11 +31,11 @@ struct VerifyAccountScreen: View {
     }
     
     func resendOtp() async {
-        await signupViewModel.signupWithEmailAndPassword(signupWithEmailPasswordModel: authUser.lastSignedupUserFormData!)
+        await signupViewModel.signupWithEmailAndPassword(signupWithEmailPasswordModel: authUserViewModel.lastSignedupUserFormData!)
     }
     
     func verifyEmail() async {
-        guard let userData = authUser.lastSignedupUserFormData else {
+        guard let userData = authUserViewModel.lastSignedupUserFormData else {
             print("No user data available")
             return
         }
@@ -77,7 +77,7 @@ struct VerifyAccountScreen: View {
                     
                     Spacer().frame(height: 13)
                     
-                    SubHeading(text: "Please enter the 6 digit code sent to \(authUser.lastSignedupUserFormData?.emailAddress ?? "your email")",
+                    SubHeading(text: "Please enter the 6 digit code sent to \(authUserViewModel.lastSignedupUserFormData?.emailAddress ?? "your email")",
                                foregroundColor: .gray1)
                 }
                 .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .leading)
@@ -134,7 +134,7 @@ struct VerifyAccountScreen: View {
                    alignment: .topLeading)
             .padding(25)
         }
-        .alert("OTP has been sent successfully!",
+        .alert("OTP has been sent successfully",
                isPresented: $signupViewModel.isSuccess) {
             Button {
                 signupViewModel.resetSignupViewModel()
@@ -142,7 +142,7 @@ struct VerifyAccountScreen: View {
                 Text("Okay")
             }
         }
-               .alert("OTP has been sent successfully!",
+               .alert("OTP has been sent successfully",
                       isPresented: $signupViewModel.isError) {
                    Button {
                        signupViewModel.resetSignupViewModel()
@@ -174,5 +174,5 @@ struct VerifyAccountScreen: View {
 #Preview {
     VerifyAccountScreen()
         .environmentObject(AuthViewModel())
-        .environmentObject(AuthUser())
+        .environmentObject(AuthUserViewModel())
 }
