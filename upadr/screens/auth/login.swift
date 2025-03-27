@@ -1,10 +1,29 @@
 import SwiftUI
 
 struct LoginScreen: View {
+    @StateObject var loginViewModel: LoginViewModel = LoginViewModel()
+    
     @EnvironmentObject var authViewModel: AuthViewModel
     
     @State var emailAddress:String = ""
     @State var password:String = ""
+    
+    @State var isEmailAddressValid: Bool = false
+    @State var isPasswordValid: Bool = false
+    
+    var isFormValid: Bool {
+        return isEmailAddressValid && isPasswordValid
+    }
+    
+    func loginWithEmailAndPassword() async {
+        await loginViewModel.loginWithEmailAndPassword(loginWithEmailAndPasswordModel:
+                                                        LoginWithEmailAndPasswordModel(emailAddress: emailAddress,
+                                                                                       password: password))
+        
+        if (loginViewModel.isLoginSuccess) {
+            authViewModel.login()
+        }
+    }
     
     var body: some View {
         GeometryReader { geo in
@@ -34,12 +53,22 @@ struct LoginScreen: View {
                         Spacer().frame(height: 25)
                         
                         InputLabel(text: "Email")
-                        InputWithoutLabel(placeholder: "email address", text: $emailAddress)
+                        InputWithoutLabel(placeholder: "email address",
+                                          text: $emailAddress,
+                                          errorMessage: isEmailAddressValid ? "" : "Enter a valid email address")
+                        .onChange(of: emailAddress) { oldValue, newValue in
+                            isEmailAddressValid = NSPredicate(format: "SELF MATCHES %@", #"^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,64}$"#).evaluate(with: newValue)
+                        }
                         
                         Spacer().frame(height: 20)
                         
                         InputLabel(text: "Password")
-                        PasswordInputWithoutLabel(placeholder: "password", text: $password)
+                        PasswordInputWithoutLabel(placeholder: "password",
+                                                  text: $password,
+                                                  errorMessage: isPasswordValid ? "" : "Password must be 8+ chars, include a letter & number")
+                        .onChange(of: password) { oldValue, newValue in
+                            isPasswordValid = NSPredicate(format: "SELF MATCHES %@", "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>])[A-Za-z\\d!@#$%^&*(),.?\":{}|<>]{8,}$").evaluate(with: newValue)
+                        }
                         
                         Spacer().frame(height: 15)
                         
@@ -57,9 +86,16 @@ struct LoginScreen: View {
                         
                         HStack {
                             Spacer()
-                            SolidButton(text: "Log in", width: geo.size.width * 0.75, onPress: {
-                                authViewModel.login()
-                            })
+                            SolidButton(text: "Log in",
+                                        width: geo.size.width * 0.75,
+                                        onPress: {
+                                Task {
+                                    await loginWithEmailAndPassword()
+                                }
+                            },
+                                        isDisabled: !isFormValid,
+                                        isLoading: loginViewModel.isLoginLoading)
+                            
                             Spacer()
                         }
                         
@@ -100,6 +136,14 @@ struct LoginScreen: View {
                    maxHeight: geo.size.height,
                    alignment: .top)
             .background(.lightSky)
+            .alert(loginViewModel.loginErrorData?.message ?? "Something went wrong",
+                   isPresented: $loginViewModel.isLoginError) {
+                Button {
+                    loginViewModel.resetLoginViewModel()
+                } label: {
+                    Text("Okay")
+                }
+            }
         }
     }
 }
