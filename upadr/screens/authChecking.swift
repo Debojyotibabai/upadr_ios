@@ -6,8 +6,10 @@ struct AuthChecking: View {
     
     @StateObject var authUserViewModel: AuthUserViewModel = AuthUserViewModel()
     
+    @AppStorage("token") var token: String?
+    
     var body: some View {
-        if(authVieModel.isLoggedIn) {
+        if(token != nil) {
             AppMainStack()
                 .environmentObject(authVieModel)
                 .environmentObject(appViewModel)
