@@ -13,6 +13,8 @@ class AppViewModel: ObservableObject {
     
     @Published var isSidebarDrawerOpened: Bool = false
     
+    @Published var procedureScreenFromChooseProcedureScreen: Bool = false
+    
     func openSidebarDrawer() {
         isSidebarDrawerOpened = true
     }

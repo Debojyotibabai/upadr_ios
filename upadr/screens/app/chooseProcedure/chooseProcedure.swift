@@ -85,6 +85,7 @@ struct ChooseProcedureScreen: View {
                     .padding(.bottom, 10)
                     .onTapGesture {
                         appViewModel.selectedAppStack = .procedureStack
+                        appViewModel.procedureScreenFromChooseProcedureScreen = true
                     }
                     
                     HStack {

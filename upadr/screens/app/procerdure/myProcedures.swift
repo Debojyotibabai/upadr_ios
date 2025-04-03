@@ -3,6 +3,29 @@ import SwiftUI
 struct MyProceduresScreen: View {
     @EnvironmentObject var appViewModel: AppViewModel
     
+    @StateObject var procedureViewModel: ProcedureViewModel = ProcedureViewModel()
+    
+    @State private var activeProcedures: [Procedure] = []
+    @State private var completedProcedures: [Procedure] = []
+    
+    func fetchAllProcedures() async {
+        await procedureViewModel.fetchAllProcedures()
+        
+        if(procedureViewModel.isSuccesss) {
+            if((procedureViewModel.proceduresResponseData?.procedures.count)! > 0) {
+                procedureViewModel.proceduresResponseData?.procedures.forEach({ procedure in
+                    if(procedure.status == "Active") {
+                        activeProcedures.append(procedure)
+                    } else {
+                        completedProcedures.append(procedure)
+                    }
+                })
+            } else if(!appViewModel.procedureScreenFromChooseProcedureScreen) {
+                appViewModel.selectedAppStack = .chooseProcedureStack
+            }
+        }
+    }
+    
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
@@ -21,30 +44,39 @@ struct MyProceduresScreen: View {
                 .padding(.vertical, 10)
                 
                 ScrollView(showsIndicators: false) {
-                    LazyVStack {
-                        ForEach(0..<5) { index in
-                            HStack {
-                                Text("Procedure")
-                                    .font(.system(size: 18, weight: .semibold))
-                                    .foregroundStyle(.gray2)
-                                
-                                Spacer()
-                                
-                                Image(systemName: "chevron.right")
-                                    .font(.system(size: 18, weight: .semibold))
-                                    .foregroundStyle(.gray4)
-                            }
-                            .padding()
-                            .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .leading)
-                            .background(.gray5)
-                            .clipShape(
-                                RoundedRectangle(cornerRadius: 10)
-                            )
-                            .shadow(color: Color(.systemGray4), radius: 5, x: 0, y: 3)
-                            .padding(.horizontal, 25)
-                            .padding(.bottom, 10)
-                            .onTapGesture {
-                                appViewModel.procedureStackNavigationPath.append(ProcedureStackScreens.procedureAllSteps)
+                    if(procedureViewModel.isFetchingProcedures) {
+                        ProgressView()
+                            .frame(minWidth: 0,
+                                   maxWidth: geo.size.width,
+                                   minHeight: 0,
+                                   maxHeight: geo.size.height,
+                                   alignment: .center)
+                    } else {
+                        LazyVStack {
+                            ForEach(activeProcedures) { procedure in
+                                HStack {
+                                    Text(procedure.title)
+                                        .font(.system(size: 18, weight: .semibold))
+                                        .foregroundStyle(.gray2)
+                                    
+                                    Spacer()
+                                    
+                                    Image(systemName: "chevron.right")
+                                        .font(.system(size: 18, weight: .semibold))
+                                        .foregroundStyle(.gray4)
+                                }
+                                .padding()
+                                .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .leading)
+                                .background(.gray5)
+                                .clipShape(
+                                    RoundedRectangle(cornerRadius: 10)
+                                )
+                                .shadow(color: Color(.systemGray4), radius: 5, x: 0, y: 3)
+                                .padding(.horizontal, 25)
+                                .padding(.bottom, 10)
+                                .onTapGesture {
+                                    appViewModel.procedureStackNavigationPath.append(ProcedureStackScreens.procedureAllSteps)
+                                }
                             }
                         }
                     }
@@ -59,30 +91,39 @@ struct MyProceduresScreen: View {
                 .padding(.vertical, 10)
                 
                 ScrollView(showsIndicators: false) {
-                    LazyVStack {
-                        ForEach(0..<5) { index in
-                            HStack {
-                                Text("Procedure")
-                                    .font(.system(size: 18, weight: .semibold))
-                                    .foregroundStyle(.gray2)
-                                
-                                Spacer()
-                                
-                                Image(systemName: "chevron.right")
-                                    .font(.system(size: 18, weight: .semibold))
-                                    .foregroundStyle(.gray4)
-                            }
-                            .padding()
-                            .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .leading)
-                            .background(.gray5)
-                            .clipShape(
-                                RoundedRectangle(cornerRadius: 10)
-                            )
-                            .shadow(color: Color(.systemGray4), radius: 5, x: 0, y: 3)
-                            .padding(.horizontal, 25)
-                            .padding(.bottom, 10)
-                            .onTapGesture {
-                                appViewModel.procedureStackNavigationPath.append(ProcedureStackScreens.procedureAllSteps)
+                    if(procedureViewModel.isFetchingProcedures) {
+                        ProgressView()
+                            .frame(minWidth: 0,
+                                   maxWidth: geo.size.width,
+                                   minHeight: 0,
+                                   maxHeight: geo.size.height,
+                                   alignment: .center)
+                    } else {
+                        LazyVStack {
+                            ForEach(completedProcedures) { procedure in
+                                HStack {
+                                    Text("Procedure")
+                                        .font(.system(size: 18, weight: .semibold))
+                                        .foregroundStyle(.gray2)
+                                    
+                                    Spacer()
+                                    
+                                    Image(systemName: "chevron.right")
+                                        .font(.system(size: 18, weight: .semibold))
+                                        .foregroundStyle(.gray4)
+                                }
+                                .padding()
+                                .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .leading)
+                                .background(.gray5)
+                                .clipShape(
+                                    RoundedRectangle(cornerRadius: 10)
+                                )
+                                .shadow(color: Color(.systemGray4), radius: 5, x: 0, y: 3)
+                                .padding(.horizontal, 25)
+                                .padding(.bottom, 10)
+                                .onTapGesture {
+                                    appViewModel.procedureStackNavigationPath.append(ProcedureStackScreens.procedureAllSteps)
+                                }
                             }
                         }
                     }
@@ -106,9 +147,15 @@ struct MyProceduresScreen: View {
                 .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .center)
             }
         }
+        .task {
+            await fetchAllProcedures()
+        }
+        .onDisappear {
+            activeProcedures.removeAll()
+            completedProcedures.removeAll()
+        }
     }
 }
-
 
 #Preview {
     MyProceduresScreen()
