@@ -2,20 +2,19 @@ import SwiftUI
 
 struct MyProceduresScreen: View {
     @EnvironmentObject var appViewModel: AppViewModel
+    @EnvironmentObject var myProcedureViewModel: MyProcedureViewModel
     
-    @StateObject var procedureViewModel: ProcedureViewModel = ProcedureViewModel()
-    
-    @State private var activeProcedures: [Procedure] = []
+    @State private var upcomingProcedures: [Procedure] = []
     @State private var completedProcedures: [Procedure] = []
     
-    func fetchAllProcedures() async {
-        await procedureViewModel.fetchAllProcedures()
+    func fetchMyAllProcedures() async {
+        await myProcedureViewModel.fetchMyAllProcedures()
         
-        if(procedureViewModel.isSuccesss) {
-            if((procedureViewModel.proceduresResponseData?.procedures.count)! > 0) {
-                procedureViewModel.proceduresResponseData?.procedures.forEach({ procedure in
+        if(myProcedureViewModel.isSuccesss) {
+            if((myProcedureViewModel.myAllProceduresResponseData?.procedures!.count)! > 0) {
+                myProcedureViewModel.myAllProceduresResponseData?.procedures!.forEach({ procedure in
                     if(procedure.status == "Active") {
-                        activeProcedures.append(procedure)
+                        upcomingProcedures.append(procedure)
                     } else {
                         completedProcedures.append(procedure)
                     }
@@ -44,7 +43,7 @@ struct MyProceduresScreen: View {
                 .padding(.vertical, 10)
                 
                 ScrollView(showsIndicators: false) {
-                    if(procedureViewModel.isFetchingProcedures) {
+                    if(myProcedureViewModel.isFetchingMyAllProcedures) {
                         ProgressView()
                             .frame(minWidth: 0,
                                    maxWidth: geo.size.width,
@@ -53,9 +52,9 @@ struct MyProceduresScreen: View {
                                    alignment: .center)
                     } else {
                         LazyVStack {
-                            ForEach(activeProcedures) { procedure in
+                            ForEach(upcomingProcedures) { procedure in
                                 HStack {
-                                    Text(procedure.title)
+                                    Text(procedure.title!)
                                         .font(.system(size: 18, weight: .semibold))
                                         .foregroundStyle(.gray2)
                                     
@@ -91,7 +90,7 @@ struct MyProceduresScreen: View {
                 .padding(.vertical, 10)
                 
                 ScrollView(showsIndicators: false) {
-                    if(procedureViewModel.isFetchingProcedures) {
+                    if(myProcedureViewModel.isFetchingMyAllProcedures) {
                         ProgressView()
                             .frame(minWidth: 0,
                                    maxWidth: geo.size.width,
@@ -102,7 +101,7 @@ struct MyProceduresScreen: View {
                         LazyVStack {
                             ForEach(completedProcedures) { procedure in
                                 HStack {
-                                    Text("Procedure")
+                                    Text(procedure.title!)
                                         .font(.system(size: 18, weight: .semibold))
                                         .foregroundStyle(.gray2)
                                     
@@ -148,10 +147,10 @@ struct MyProceduresScreen: View {
             }
         }
         .task {
-            await fetchAllProcedures()
+            await fetchMyAllProcedures()
         }
         .onDisappear {
-            activeProcedures.removeAll()
+            upcomingProcedures.removeAll()
             completedProcedures.removeAll()
         }
     }
@@ -160,4 +159,5 @@ struct MyProceduresScreen: View {
 #Preview {
     MyProceduresScreen()
         .environmentObject(AppViewModel())
+        .environmentObject(MyProcedureViewModel())
 }

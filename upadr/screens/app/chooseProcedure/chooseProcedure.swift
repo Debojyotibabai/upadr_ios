@@ -2,8 +2,13 @@ import SwiftUI
 
 struct ChooseProcedureScreen: View {
     @EnvironmentObject var appViewModel: AppViewModel
+    @EnvironmentObject var chooseProcedureViewModel: ChooseProcedureViewModel
     
     @State var selectedProcedure: Int?
+    
+    func fetchAllProcedures() async {
+        await chooseProcedureViewModel.fetchAllProcedures()
+    }
     
     var body: some View {
         GeometryReader { geo in
@@ -111,10 +116,14 @@ struct ChooseProcedureScreen: View {
                    alignment: .top)
             .background(.lightSky)
         }
+        .task {
+            await fetchAllProcedures()
+        }
     }
 }
 
 #Preview {
     ChooseProcedureScreen()
         .environmentObject(AppViewModel())
+        .environmentObject(ChooseProcedureViewModel())
 }

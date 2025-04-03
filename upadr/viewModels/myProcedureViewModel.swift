@@ -1,34 +1,34 @@
 import SwiftUI
 
 @MainActor
-class ProcedureViewModel: ObservableObject {
-    @Published var isFetchingProcedures: Bool = false
+class MyProcedureViewModel: ObservableObject {
+    @Published var isFetchingMyAllProcedures: Bool = false
     @Published var isError: Bool = false
     @Published var isSuccesss: Bool = false
-    @Published var proceduresResponseData: ProcedureResponse?
+    @Published var myAllProceduresResponseData: ChooseProcedureResponse?
     
-    private var getAllProceduresURL = URL(string: "https://dev-api.upadr.com/procedure/get-all-procedures")!
+    private var getMyAllProceduresURL = URL(string: "https://dev-api.upadr.com/procedure/get-all-procedures")!
     
     @AppStorage("token") var token: String?
     
-    func resetProcedureViewModel() {
-        isFetchingProcedures = false
+    func resetMyProcedureViewModel() {
+        isFetchingMyAllProcedures = false
         isSuccesss = false
         isError = false
-        proceduresResponseData = nil
+        myAllProceduresResponseData = nil
     }
     
-    func setResponseData(data: ProcedureResponse) {
-        isFetchingProcedures = false
+    func setResponseData(data: ChooseProcedureResponse) {
+        isFetchingMyAllProcedures = false
         isSuccesss = true
-        proceduresResponseData = data
+        myAllProceduresResponseData = data
         isError = false
     }
     
-    func fetchAllProcedures() async {
-        isFetchingProcedures = true
+    func fetchMyAllProcedures() async {
+        isFetchingMyAllProcedures = true
         
-        var request = URLRequest(url: getAllProceduresURL)
+        var request = URLRequest(url: getMyAllProceduresURL)
         request.httpMethod = "GET"
         request.setValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
         
@@ -37,21 +37,23 @@ class ProcedureViewModel: ObservableObject {
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 print("Invalid response type")
-                isFetchingProcedures = false
+                isFetchingMyAllProcedures = false
                 return
             }
             
             do {
                 if((200...399).contains(httpResponse.statusCode)) {
-                    let response = try JSONDecoder().decode(ProcedureResponse.self, from: data)
+                    let response = try JSONDecoder().decode(ChooseProcedureResponse.self, from: data)
                     print("Success response: \(response)")
                     setResponseData(data: response)
                 } else {}
             } catch {
-                print("JSON decoding error: \(error.localizedDescription)")
+                print("JSON decoding error: \(error)")
+                isFetchingMyAllProcedures = false
             }
         } catch {
             print("Fetch procedures failed: \(error.localizedDescription)")
+            isFetchingMyAllProcedures = false
         }
     }
 }
