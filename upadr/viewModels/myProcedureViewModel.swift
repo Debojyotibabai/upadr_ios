@@ -4,7 +4,7 @@ import SwiftUI
 class MyProcedureViewModel: ObservableObject {
     @Published var isFetchingMyAllProcedures: Bool = false
     @Published var isError: Bool = false
-    @Published var isSuccesss: Bool = false
+    @Published var isSuccess: Bool = false
     @Published var myAllProceduresResponseData: ChooseProcedureResponse?
     
     private var getMyAllProceduresURL = URL(string: "https://dev-api.upadr.com/procedure/get-all-procedures")!
@@ -13,14 +13,14 @@ class MyProcedureViewModel: ObservableObject {
     
     func resetMyProcedureViewModel() {
         isFetchingMyAllProcedures = false
-        isSuccesss = false
+        isSuccess = false
         isError = false
         myAllProceduresResponseData = nil
     }
     
     func setResponseData(data: ChooseProcedureResponse) {
         isFetchingMyAllProcedures = false
-        isSuccesss = true
+        isSuccess = true
         myAllProceduresResponseData = data
         isError = false
     }
@@ -52,7 +52,7 @@ class MyProcedureViewModel: ObservableObject {
                 isFetchingMyAllProcedures = false
             }
         } catch {
-            print("Fetch procedures failed: \(error.localizedDescription)")
+            print("Fetch my all procedures failed: \(error.localizedDescription)")
             isFetchingMyAllProcedures = false
         }
     }

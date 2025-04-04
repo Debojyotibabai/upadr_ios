@@ -48,24 +48,30 @@ struct ChooseProcedureScreen: View {
                         .padding(.horizontal, 25)
                         .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .leading)
                         
-                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
-                            ForEach(0..<10) { index in
-                                Text("Procedure #\(index + 1)")
-                                    .font(.system(size: 18, weight: .semibold))
-                                    .foregroundStyle(selectedProcedure == index ? .white : .deepBlue)
-                                    .padding()
-                                    .frame(minWidth: 0, maxWidth: geo.size.width)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .fill(selectedProcedure == index ? .deepBlue : .white)
-                                    )
-                                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(.deepBlue, lineWidth: 2))
-                                    .onTapGesture {
-                                        selectedProcedure = index
-                                    }
+                        if(chooseProcedureViewModel.isFetchingAllProcedures) {
+                            ProgressView()
+                        } else if(chooseProcedureViewModel.isSuccess && (chooseProcedureViewModel.allProceduresResponseData?.procedures?.count)! <= 0) {
+                            Text("No procedures found")
+                        } else if(chooseProcedureViewModel.isSuccess && (chooseProcedureViewModel.allProceduresResponseData?.procedures?.count)! > 0) {
+                            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
+                                ForEach(chooseProcedureViewModel.allProceduresResponseData?.procedures) { procedure in
+                                    Text(procedure.title)
+                                        .font(.system(size: 18, weight: .semibold))
+                                        .foregroundStyle(selectedProcedure == index ? .white : .deepBlue)
+                                        .padding()
+                                        .frame(minWidth: 0, maxWidth: geo.size.width)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .fill(selectedProcedure == index ? .deepBlue : .white)
+                                        )
+                                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(.deepBlue, lineWidth: 2))
+                                        .onTapGesture {
+                                            selectedProcedure = index
+                                        }
+                                }
                             }
                         }
-                        .padding(.horizontal, 25)
+                            .padding(.horizontal, 25)
                     }
                     
                     HStack {

@@ -2,31 +2,31 @@ import SwiftUI
 
 @MainActor
 class ChooseProcedureViewModel: ObservableObject {
-    @Published var isFetchingProcedures: Bool = false
+    @Published var isFetchingAllProcedures: Bool = false
     @Published var isError: Bool = false
-    @Published var isSuccesss: Bool = false
-    @Published var proceduresResponseData: ChooseProcedureResponse?
+    @Published var isSuccess: Bool = false
+    @Published var allProceduresResponseData: ChooseProcedureResponse?
     
     private var getAllProceduresURL = URL(string: "https://dev-api.upadr.com/procedure/get-all-procedures")!
     
     @AppStorage("token") var token: String?
     
     func resetChooseProcedureViewModel() {
-        isFetchingProcedures = false
-        isSuccesss = false
+        isFetchingAllProcedures = false
+        isSuccess = false
         isError = false
-        proceduresResponseData = nil
+        allProceduresResponseData = nil
     }
     
     func setResponseData(data: ChooseProcedureResponse) {
-        isFetchingProcedures = false
-        isSuccesss = true
-        proceduresResponseData = data
+        isFetchingAllProcedures = false
+        isSuccess = true
+        allProceduresResponseData = data
         isError = false
     }
     
     func fetchAllProcedures() async {
-        isFetchingProcedures = true
+        isFetchingAllProcedures = true
         
         var request = URLRequest(url: getAllProceduresURL)
         request.httpMethod = "GET"
@@ -37,7 +37,7 @@ class ChooseProcedureViewModel: ObservableObject {
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 print("Invalid response type")
-                isFetchingProcedures = false
+                isFetchingAllProcedures = false
                 return
             }
             
@@ -49,11 +49,11 @@ class ChooseProcedureViewModel: ObservableObject {
                 } else {}
             } catch {
                 print("JSON decoding error: \(error.localizedDescription)")
-                isFetchingProcedures = false
+                isFetchingAllProcedures = false
             }
         } catch {
-            print("Fetch procedures failed: \(error.localizedDescription)")
-            isFetchingProcedures = false
+            print("Fetch all procedures failed: \(error.localizedDescription)")
+            isFetchingAllProcedures = false
         }
     }
 }
