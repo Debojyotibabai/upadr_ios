@@ -4,7 +4,7 @@ struct ChooseProcedureScreen: View {
     @EnvironmentObject var appViewModel: AppViewModel
     @EnvironmentObject var chooseProcedureViewModel: ChooseProcedureViewModel
     
-    @State var selectedProcedure: Int?
+    @State var selectedProcedure: String?
     
     func fetchAllProcedures() async {
         await chooseProcedureViewModel.fetchAllProcedures()
@@ -51,27 +51,28 @@ struct ChooseProcedureScreen: View {
                         if(chooseProcedureViewModel.isFetchingAllProcedures) {
                             ProgressView()
                         } else if(chooseProcedureViewModel.isSuccess && (chooseProcedureViewModel.allProceduresResponseData?.procedures?.count)! <= 0) {
-                            Text("No procedures found")
+                            Text("No procedure found")
+                                .foregroundStyle(.gray)
                         } else if(chooseProcedureViewModel.isSuccess && (chooseProcedureViewModel.allProceduresResponseData?.procedures?.count)! > 0) {
                             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
-                                ForEach(chooseProcedureViewModel.allProceduresResponseData?.procedures) { procedure in
-                                    Text(procedure.title)
+                                ForEach((chooseProcedureViewModel.allProceduresResponseData?.procedures)!) { procedure in
+                                    Text(procedure.title!)
                                         .font(.system(size: 18, weight: .semibold))
-                                        .foregroundStyle(selectedProcedure == index ? .white : .deepBlue)
+                                        .foregroundStyle(selectedProcedure == procedure.id! ? .white :.deepBlue)
                                         .padding()
-                                        .frame(minWidth: 0, maxWidth: geo.size.width)
+                                        .frame(minWidth: 0, maxWidth: .infinity)
                                         .background(
                                             RoundedRectangle(cornerRadius: 10)
-                                                .fill(selectedProcedure == index ? .deepBlue : .white)
+                                                .fill(selectedProcedure == procedure.id! ? .deepBlue : .white)
                                         )
                                         .overlay(RoundedRectangle(cornerRadius: 10).stroke(.deepBlue, lineWidth: 2))
+                                        .padding(.horizontal, 25)
                                         .onTapGesture {
-                                            selectedProcedure = index
+                                            selectedProcedure = procedure.id!
                                         }
                                 }
                             }
                         }
-                            .padding(.horizontal, 25)
                     }
                     
                     HStack {
