@@ -2,17 +2,17 @@ import SwiftUI
 
 struct MyProceduresScreen: View {
     @EnvironmentObject var appViewModel: AppViewModel
-    @EnvironmentObject var myProcedureViewModel: MyProcedureViewModel
+    @EnvironmentObject var procedureViewModel: ProcedureViewModel
     
     @State private var upcomingProcedures: [Procedure] = []
     @State private var completedProcedures: [Procedure] = []
     
     func fetchMyAllProcedures() async {
-        await myProcedureViewModel.fetchMyAllProcedures()
+        await procedureViewModel.fetchAllProcedures()
         
-        if(myProcedureViewModel.isSuccess) {
-            if((myProcedureViewModel.myAllProceduresResponseData?.procedures!.count)! > 0) {
-                myProcedureViewModel.myAllProceduresResponseData?.procedures!.forEach({ procedure in
+        if(procedureViewModel.isSuccess) {
+            if((procedureViewModel.allProceduresResponseData?.procedures!.count)! > 0) {
+                procedureViewModel.allProceduresResponseData?.procedures!.forEach({ procedure in
                     if(procedure.status == "Active") {
                         upcomingProcedures.append(procedure)
                     } else {
@@ -43,7 +43,7 @@ struct MyProceduresScreen: View {
                 .padding(.vertical, 10)
                 
                 ScrollView(showsIndicators: false) {
-                    if(myProcedureViewModel.isFetchingMyAllProcedures) {
+                    if(procedureViewModel.isFetchingAllProcedures) {
                         ProgressView()
                             .frame(minWidth: 0,
                                    maxWidth: geo.size.width,
@@ -90,7 +90,7 @@ struct MyProceduresScreen: View {
                 .padding(.vertical, 10)
                 
                 ScrollView(showsIndicators: false) {
-                    if(myProcedureViewModel.isFetchingMyAllProcedures) {
+                    if(procedureViewModel.isFetchingAllProcedures) {
                         ProgressView()
                             .frame(minWidth: 0,
                                    maxWidth: geo.size.width,
@@ -159,5 +159,5 @@ struct MyProceduresScreen: View {
 #Preview {
     MyProceduresScreen()
         .environmentObject(AppViewModel())
-        .environmentObject(MyProcedureViewModel())
+        .environmentObject(ProcedureViewModel())
 }

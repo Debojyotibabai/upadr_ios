@@ -1,34 +1,34 @@
 import SwiftUI
 
 @MainActor
-class MyProcedureViewModel: ObservableObject {
-    @Published var isFetchingMyAllProcedures: Bool = false
+class ProcedureViewModel: ObservableObject {
+    @Published var isFetchingAllProcedures: Bool = false
     @Published var isError: Bool = false
     @Published var isSuccess: Bool = false
-    @Published var myAllProceduresResponseData: ChooseProcedureResponse?
+    @Published var allProceduresResponseData: ChooseProcedureResponse?
     
-    private var getMyAllProceduresURL = URL(string: "https://dev-api.upadr.com/procedure/get-all-procedures")!
+    private var getAllProceduresURL = URL(string: "https://dev-api.upadr.com/procedure/get-all-procedures")!
     
     @AppStorage("token") var token: String?
     
-    func resetMyProcedureViewModel() {
-        isFetchingMyAllProcedures = false
+    func resetProcedureViewModel() {
+        isFetchingAllProcedures = false
         isSuccess = false
         isError = false
-        myAllProceduresResponseData = nil
+        allProceduresResponseData = nil
     }
     
     func setResponseData(data: ChooseProcedureResponse) {
-        isFetchingMyAllProcedures = false
+        isFetchingAllProcedures = false
         isSuccess = true
-        myAllProceduresResponseData = data
+        allProceduresResponseData = data
         isError = false
     }
     
-    func fetchMyAllProcedures() async {
-        isFetchingMyAllProcedures = true
+    func fetchAllProcedures() async {
+        isFetchingAllProcedures = true
         
-        var request = URLRequest(url: getMyAllProceduresURL)
+        var request = URLRequest(url: getAllProceduresURL)
         request.httpMethod = "GET"
         request.setValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
         
@@ -37,7 +37,7 @@ class MyProcedureViewModel: ObservableObject {
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 print("Invalid response type")
-                isFetchingMyAllProcedures = false
+                isFetchingAllProcedures = false
                 return
             }
             
@@ -49,11 +49,11 @@ class MyProcedureViewModel: ObservableObject {
                 } else {}
             } catch {
                 print("JSON decoding error: \(error)")
-                isFetchingMyAllProcedures = false
+                isFetchingAllProcedures = false
             }
         } catch {
             print("Fetch my all procedures failed: \(error.localizedDescription)")
-            isFetchingMyAllProcedures = false
+            isFetchingAllProcedures = false
         }
     }
 }
