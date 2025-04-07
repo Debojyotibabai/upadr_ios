@@ -7,6 +7,10 @@ class ChooseProcedureViewModel: ObservableObject {
     @Published var isSuccess: Bool = false
     @Published var allProceduresResponseData: ChooseProcedureResponse?
     
+    @Published var selectedProcedure: String?
+    @Published var selectedDate: Date = Date()
+    @Published var selectedTime: Date = Date()
+    
     private var getAllProceduresURL = URL(string: "https://dev-api.upadr.com/procedure/get-all-procedures")!
     
     @AppStorage("token") var token: String?
@@ -44,7 +48,7 @@ class ChooseProcedureViewModel: ObservableObject {
             do {
                 if((200...399).contains(httpResponse.statusCode)) {
                     let response = try JSONDecoder().decode(ChooseProcedureResponse.self, from: data)
-                    print("Success response: \(response)")
+                    //                    print("Success response: \(response)")
                     setResponseData(data: response)
                 } else {}
             } catch {

@@ -2,12 +2,14 @@ import SwiftUI
 
 struct ChooseDateAndTimeScreen: View {
     @EnvironmentObject var appViewModel: AppViewModel
+    @EnvironmentObject var chooseProcedureViewModel: ChooseProcedureViewModel
     
-    @State var selectedDate: Date = Date()
     @State var showDatePicker: Bool = false
-    
-    @State var selectedTime: Date = Date()
     @State var showTimePicker: Bool = false
+    
+    func createProcedure() async {
+        
+    }
     
     var body: some View {
         GeometryReader { geo in
@@ -39,12 +41,12 @@ struct ChooseDateAndTimeScreen: View {
                         Spacer().frame(height: 20)
                         
                         InputLabel(text: "Date")
-                        DatePickerWithoutLabel(selectedDate: $selectedDate, showDatePicker: $showDatePicker)
+                        DatePickerWithoutLabel(selectedDate: $chooseProcedureViewModel.selectedDate, showDatePicker: $showDatePicker)
                         
                         Spacer().frame(height: 20)
                         
                         InputLabel(text: "Time")
-                        TimePickerWithoutLabel(selectedTime: $selectedTime, showTimePicker: $showTimePicker)
+                        TimePickerWithoutLabel(selectedTime: $chooseProcedureViewModel.selectedTime, showTimePicker: $showTimePicker)
                         
                         Spacer().frame(height: 50)
                         
@@ -59,8 +61,12 @@ struct ChooseDateAndTimeScreen: View {
                             Spacer()
                             
                             SolidButton(text: "Next", width: geo.size.width * 0.45, onPress: {
-                                appViewModel.selectedAppStack = .procedureStack
-                                appViewModel.procedureStackNavigationPath.append(ProcedureStackScreens.procedureAllSteps)
+                                //                                appViewModel.selectedAppStack = .procedureStack
+                                //                                appViewModel.procedureStackNavigationPath.append(ProcedureStackScreens.procedureAllSteps)
+                                
+                                Task {
+                                    await createProcedure()
+                                }
                             })
                         }
                     }
@@ -88,4 +94,5 @@ struct ChooseDateAndTimeScreen: View {
 #Preview {
     ChooseDateAndTimeScreen()
         .environmentObject(AppViewModel())
+        .environmentObject(ChooseProcedureViewModel())
 }

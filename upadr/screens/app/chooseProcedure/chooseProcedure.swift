@@ -4,8 +4,6 @@ struct ChooseProcedureScreen: View {
     @EnvironmentObject var appViewModel: AppViewModel
     @EnvironmentObject var chooseProcedureViewModel: ChooseProcedureViewModel
     
-    @State var selectedProcedure: String?
-    
     func fetchAllProcedures() async {
         await chooseProcedureViewModel.fetchAllProcedures()
     }
@@ -58,17 +56,17 @@ struct ChooseProcedureScreen: View {
                                 ForEach((chooseProcedureViewModel.allProceduresResponseData?.procedures)!) { procedure in
                                     Text(procedure.title!)
                                         .font(.system(size: 18, weight: .semibold))
-                                        .foregroundStyle(selectedProcedure == procedure.id! ? .white :.deepBlue)
+                                        .foregroundStyle(chooseProcedureViewModel.selectedProcedure == procedure.id! ? .white :.deepBlue)
                                         .padding()
                                         .frame(minWidth: 0, maxWidth: .infinity)
                                         .background(
                                             RoundedRectangle(cornerRadius: 10)
-                                                .fill(selectedProcedure == procedure.id! ? .deepBlue : .white)
+                                                .fill(chooseProcedureViewModel.selectedProcedure == procedure.id! ? .deepBlue : .white)
                                         )
                                         .overlay(RoundedRectangle(cornerRadius: 10).stroke(.deepBlue, lineWidth: 2))
                                         .padding(.horizontal, 25)
                                         .onTapGesture {
-                                            selectedProcedure = procedure.id!
+                                            chooseProcedureViewModel.selectedProcedure = procedure.id!
                                         }
                                 }
                             }
@@ -103,9 +101,12 @@ struct ChooseProcedureScreen: View {
                     HStack {
                         Spacer()
                         
-                        SolidButton(text: "Next", width: geo.size.width * 0.5, onPress: {
+                        SolidButton(text: "Next",
+                                    width: geo.size.width * 0.5,
+                                    onPress: {
                             appViewModel.chooseProcedureStackNavigationPath.append(ChooseProcedureStackScreens.chooseDateAndTime)
-                        })
+                        },
+                                    isDisabled: chooseProcedureViewModel.selectedProcedure == nil)
                     }
                     .padding(.horizontal, 25)
                 }

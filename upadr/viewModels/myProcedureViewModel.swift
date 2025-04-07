@@ -44,7 +44,7 @@ class MyProcedureViewModel: ObservableObject {
             do {
                 if((200...399).contains(httpResponse.statusCode)) {
                     let response = try JSONDecoder().decode(ChooseProcedureResponse.self, from: data)
-                    print("Success response: \(response)")
+                    //                    print("Success response: \(response)")
                     setResponseData(data: response)
                 } else {}
             } catch {
