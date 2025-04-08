@@ -4,25 +4,8 @@ struct MyProceduresScreen: View {
     @EnvironmentObject var appViewModel: AppViewModel
     @EnvironmentObject var procedureViewModel: ProcedureViewModel
     
-    @State private var upcomingProcedures: [Procedure] = []
-    @State private var completedProcedures: [Procedure] = []
-    
     func fetchMyAllProcedures() async {
         await procedureViewModel.fetchAllProcedures()
-        
-        if(procedureViewModel.isSuccessWhileFetchingAllProcedure) {
-            if((procedureViewModel.allProceduresResponseData?.procedures!.count)! > 0) {
-                procedureViewModel.allProceduresResponseData?.procedures!.forEach({ procedure in
-                    if(procedure.status == "Active") {
-                        upcomingProcedures.append(procedure)
-                    } else {
-                        completedProcedures.append(procedure)
-                    }
-                })
-            } else if(!appViewModel.procedureScreenFromChooseProcedureScreen) {
-                appViewModel.selectedAppStack = .chooseProcedureStack
-            }
-        }
     }
     
     var body: some View {
@@ -52,9 +35,9 @@ struct MyProceduresScreen: View {
                                    alignment: .center)
                     } else {
                         LazyVStack {
-                            ForEach(upcomingProcedures) { procedure in
+                            ForEach(procedureViewModel.allProceduresResponseData?.upcomingUserProcedures ?? []) { procedure in
                                 HStack {
-                                    Text(procedure.title!)
+                                    Text((procedure.procedure?.title)!)
                                         .font(.system(size: 18, weight: .semibold))
                                         .foregroundStyle(.gray2)
                                     
@@ -99,9 +82,9 @@ struct MyProceduresScreen: View {
                                    alignment: .center)
                     } else {
                         LazyVStack {
-                            ForEach(completedProcedures) { procedure in
+                            ForEach(procedureViewModel.allProceduresResponseData?.completedUserProcedures ?? []) { procedure in
                                 HStack {
-                                    Text(procedure.title!)
+                                    Text((procedure.procedure?.title)!)
                                         .font(.system(size: 18, weight: .semibold))
                                         .foregroundStyle(.gray2)
                                     
@@ -148,10 +131,6 @@ struct MyProceduresScreen: View {
         }
         .task {
             await fetchMyAllProcedures()
-        }
-        .onDisappear {
-            upcomingProcedures.removeAll()
-            completedProcedures.removeAll()
         }
     }
 }

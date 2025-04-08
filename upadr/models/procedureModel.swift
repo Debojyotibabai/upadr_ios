@@ -19,12 +19,21 @@ struct CreateProcedureResponseModel: Codable {
     let userProcedure: UserProcedure?
 }
 
+// MARK: - AllProcedureResponseModel
+struct AllProcedureResponseModel: Codable {
+    let upcomingUserProcedures, completedUserProcedures: [UserProcedure]?
+}
+
 // MARK: - UserProcedure
-struct UserProcedure: Codable {
+struct UserProcedure: Codable, Identifiable {
     let userProcedureID: String?
     let procedure: Procedure?
     let procedureSet: ProcedureSet?
     let dateTime: String?
+    
+    var id: String? {
+        return userProcedureID
+    }
     
     enum CodingKeys: String, CodingKey {
         case userProcedureID = "userProcedureId"

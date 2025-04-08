@@ -5,7 +5,7 @@ class ProcedureViewModel: ObservableObject {
     @Published var isFetchingAllProcedures: Bool = false
     @Published var isErrorWhileFetchingAllProcedure: Bool = false
     @Published var isSuccessWhileFetchingAllProcedure: Bool = false
-    @Published var allProceduresResponseData: ChooseProcedureResponse?
+    @Published var allProceduresResponseData: AllProcedureResponseModel?
     
     @Published var isCreatingProcedure: Bool = false
     @Published var isErrorWhileCreatingProcedure: Bool = false
@@ -13,7 +13,7 @@ class ProcedureViewModel: ObservableObject {
     @Published var createProcedureResponseData: CreateProcedureResponseModel?
     @Published var createProcedureErrorData: CreateProcedureErrorModel?
     
-    private var getAllProceduresURL = URL(string: "https://dev-api.upadr.com/procedure/get-all-procedures")!
+    private var getAllProceduresURL = URL(string: "https://dev-api.upadr.com/user-procedure/get-user-procedures")!
     private var createProcedureURL = URL(string: "https://dev-api.upadr.com/user-procedure/create-user-procedure")!
     
     @AppStorage("token") var token: String?
@@ -34,7 +34,7 @@ class ProcedureViewModel: ObservableObject {
         createProcedureResponseData = nil
     }
     
-    func setAllProcedureResponseData(data: ChooseProcedureResponse) {
+    func setAllProcedureResponseData(data: AllProcedureResponseModel) {
         isFetchingAllProcedures = false
         isSuccessWhileFetchingAllProcedure = true
         allProceduresResponseData = data
@@ -110,8 +110,8 @@ class ProcedureViewModel: ObservableObject {
             
             do {
                 if((200...399).contains(httpResponse.statusCode)) {
-                    let response = try JSONDecoder().decode(ChooseProcedureResponse.self, from: data)
-                    //                    print("Success response: \(response)")
+                    let response = try JSONDecoder().decode(AllProcedureResponseModel.self, from: data)
+                    print("Success response: \(response)")
                     setAllProcedureResponseData(data: response)
                 } else {}
             } catch {
@@ -119,7 +119,7 @@ class ProcedureViewModel: ObservableObject {
                 isFetchingAllProcedures = false
             }
         } catch {
-            print("Fetch my all procedures failed: \(error.localizedDescription)")
+            print("Fetch all procedures failed: \(error.localizedDescription)")
             isFetchingAllProcedures = false
         }
     }
