@@ -3,26 +3,93 @@ import SwiftUI
 @MainActor
 class ProcedureViewModel: ObservableObject {
     @Published var isFetchingAllProcedures: Bool = false
-    @Published var isError: Bool = false
-    @Published var isSuccess: Bool = false
+    @Published var isErrorWhileFetchingAllProcedure: Bool = false
+    @Published var isSuccessWhileFetchingAllProcedure: Bool = false
     @Published var allProceduresResponseData: ChooseProcedureResponse?
     
+    @Published var isCreatingProcedure: Bool = false
+    @Published var isErrorWhileCreatingProcedure: Bool = false
+    @Published var isSuccessWhileCreatingProcedure: Bool = false
+    @Published var createProcedureResponseData: CreateProcedureResponseModel?
+    @Published var createProcedureErrorData: CreateProcedureErrorModel?
+    
     private var getAllProceduresURL = URL(string: "https://dev-api.upadr.com/procedure/get-all-procedures")!
+    private var createProcedureURL = URL(string: "https://dev-api.upadr.com/user-procedure/create-user-procedure")!
     
     @AppStorage("token") var token: String?
     
-    func resetProcedureViewModel() {
-        isFetchingAllProcedures = false
-        isSuccess = false
-        isError = false
-        allProceduresResponseData = nil
+    func setCreateProcedureResponseData(data: CreateProcedureResponseModel) {
+        isCreatingProcedure = false
+        isSuccessWhileCreatingProcedure = true
+        createProcedureResponseData = data
+        isErrorWhileCreatingProcedure = false
+        createProcedureErrorData = nil
     }
     
-    func setResponseData(data: ChooseProcedureResponse) {
+    func setCreateProcedureErrorData(data: CreateProcedureErrorModel) {
+        isCreatingProcedure = false
+        isErrorWhileCreatingProcedure = true
+        createProcedureErrorData = data
+        isSuccessWhileCreatingProcedure = false
+        createProcedureResponseData = nil
+    }
+    
+    func setAllProcedureResponseData(data: ChooseProcedureResponse) {
         isFetchingAllProcedures = false
-        isSuccess = true
+        isSuccessWhileFetchingAllProcedure = true
         allProceduresResponseData = data
-        isError = false
+        isErrorWhileFetchingAllProcedure = false
+    }
+    
+    func resetCreateProcedureData() {
+        isCreatingProcedure = false
+        isErrorWhileCreatingProcedure = false
+        isSuccessWhileCreatingProcedure = false
+        createProcedureResponseData = nil
+        createProcedureErrorData = nil
+    }
+    
+    func createProcedure(createProcedureRequestModel: CreateProcedureRequestModel) async {
+        isCreatingProcedure = true
+        
+        guard let jsonData = try? JSONEncoder().encode(createProcedureRequestModel) else {
+            print("Failed to encode")
+            isCreatingProcedure = false
+            return
+        }
+        
+        var request = URLRequest(url: createProcedureURL)
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        do {
+            let (data,response) = try await URLSession.shared.upload(for: request, from: jsonData)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("Invalid response type")
+                isCreatingProcedure = false
+                return
+            }
+            
+            do {
+                if((200...399).contains(httpResponse.statusCode)) {
+                    let response = try JSONDecoder().decode(CreateProcedureResponseModel.self, from: data)
+                    print("Success response: \(response)")
+                    setCreateProcedureResponseData(data: response)
+                } else {
+                    let response = try JSONDecoder().decode(CreateProcedureErrorModel.self, from: data)
+                    print("Error response: \(response)")
+                    setCreateProcedureErrorData(data: response)
+                }
+            } catch {
+                print("JSON decoding error: \(error)")
+                isFetchingAllProcedures = false
+            }
+        } catch {
+            print("Create procedure failed: \(error.localizedDescription)")
+            isCreatingProcedure = false
+        }
     }
     
     func fetchAllProcedures() async {
@@ -45,7 +112,7 @@ class ProcedureViewModel: ObservableObject {
                 if((200...399).contains(httpResponse.statusCode)) {
                     let response = try JSONDecoder().decode(ChooseProcedureResponse.self, from: data)
                     //                    print("Success response: \(response)")
-                    setResponseData(data: response)
+                    setAllProcedureResponseData(data: response)
                 } else {}
             } catch {
                 print("JSON decoding error: \(error)")

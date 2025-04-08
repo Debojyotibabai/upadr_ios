@@ -4,6 +4,7 @@ struct ChooseProcedureStack: View {
     @EnvironmentObject var appViewModel: AppViewModel
     
     @StateObject var chooseProcedureViewModel: ChooseProcedureViewModel = ChooseProcedureViewModel()
+    @StateObject var procedureViewModel: ProcedureViewModel = ProcedureViewModel()
     
     var body: some View {
         NavigationStack(path: $appViewModel.chooseProcedureStackNavigationPath) {
@@ -16,6 +17,7 @@ struct ChooseProcedureStack: View {
                 }
         }
         .environmentObject(chooseProcedureViewModel)
+        .environmentObject(procedureViewModel)
     }
 }
 

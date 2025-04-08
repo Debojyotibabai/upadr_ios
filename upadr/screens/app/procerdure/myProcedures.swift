@@ -10,7 +10,7 @@ struct MyProceduresScreen: View {
     func fetchMyAllProcedures() async {
         await procedureViewModel.fetchAllProcedures()
         
-        if(procedureViewModel.isSuccess) {
+        if(procedureViewModel.isSuccessWhileFetchingAllProcedure) {
             if((procedureViewModel.allProceduresResponseData?.procedures!.count)! > 0) {
                 procedureViewModel.allProceduresResponseData?.procedures!.forEach({ procedure in
                     if(procedure.status == "Active") {

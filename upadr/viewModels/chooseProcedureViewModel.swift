@@ -15,13 +15,6 @@ class ChooseProcedureViewModel: ObservableObject {
     
     @AppStorage("token") var token: String?
     
-    func resetChooseProcedureViewModel() {
-        isFetchingAllProcedures = false
-        isSuccess = false
-        isError = false
-        allProceduresResponseData = nil
-    }
-    
     func setResponseData(data: ChooseProcedureResponse) {
         isFetchingAllProcedures = false
         isSuccess = true
