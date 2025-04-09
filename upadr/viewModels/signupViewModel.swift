@@ -39,7 +39,7 @@ class SignupViewModel: ObservableObject {
         
         guard let jsonData = try? JSONEncoder().encode(signupWithEmailPasswordModel) else {
             print("Failed to encode")
-            isSignupLoading = false
+            setErrorData(data: SignupWithEmailAndPasswordResponseModel(message: "Failed to register"))
             return
         }
         
@@ -52,7 +52,7 @@ class SignupViewModel: ObservableObject {
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 print("Invalid response type")
-                isSignupLoading = false
+                setErrorData(data: SignupWithEmailAndPasswordResponseModel(message: "Failed to register"))
                 return
             }
             
@@ -68,6 +68,7 @@ class SignupViewModel: ObservableObject {
                 }
             } catch {
                 print("JSON decoding error: \(error.localizedDescription)")
+                setErrorData(data: SignupWithEmailAndPasswordResponseModel(message: "Failed to register"))
             }
         } catch {
             print("Signup failed: \(error.localizedDescription)")

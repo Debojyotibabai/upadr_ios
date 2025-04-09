@@ -34,13 +34,6 @@ class ProcedureViewModel: ObservableObject {
         createProcedureResponseData = nil
     }
     
-    func setAllProcedureResponseData(data: AllProcedureResponseModel) {
-        isFetchingAllProcedures = false
-        isSuccessWhileFetchingAllProcedure = true
-        allProceduresResponseData = data
-        isErrorWhileFetchingAllProcedure = false
-    }
-    
     func resetCreateProcedureData() {
         isCreatingProcedure = false
         isErrorWhileCreatingProcedure = false
@@ -49,12 +42,26 @@ class ProcedureViewModel: ObservableObject {
         createProcedureErrorData = nil
     }
     
+    func setAllProcedureResponseData(data: AllProcedureResponseModel) {
+        isFetchingAllProcedures = false
+        isSuccessWhileFetchingAllProcedure = true
+        allProceduresResponseData = data
+        isErrorWhileFetchingAllProcedure = false
+    }
+    
+    func setAllProcedureErrorData() {
+        isFetchingAllProcedures = false
+        isErrorWhileFetchingAllProcedure = true
+        isSuccessWhileFetchingAllProcedure = false
+        allProceduresResponseData = nil
+    }
+    
     func createProcedure(createProcedureRequestModel: CreateProcedureRequestModel) async {
         isCreatingProcedure = true
         
         guard let jsonData = try? JSONEncoder().encode(createProcedureRequestModel) else {
             print("Failed to encode")
-            isCreatingProcedure = false
+            setCreateProcedureErrorData(data: CreateProcedureErrorModel(message: "Failed to create procedure"))
             return
         }
         
@@ -68,7 +75,7 @@ class ProcedureViewModel: ObservableObject {
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 print("Invalid response type")
-                isCreatingProcedure = false
+                setCreateProcedureErrorData(data: CreateProcedureErrorModel(message: "Failed to create procedure"))
                 return
             }
             
@@ -84,11 +91,11 @@ class ProcedureViewModel: ObservableObject {
                 }
             } catch {
                 print("JSON decoding error: \(error)")
-                isFetchingAllProcedures = false
+                setCreateProcedureErrorData(data: CreateProcedureErrorModel(message: "Failed to create procedure"))
             }
         } catch {
             print("Create procedure failed: \(error.localizedDescription)")
-            isCreatingProcedure = false
+            setCreateProcedureErrorData(data: CreateProcedureErrorModel(message: "Failed to create procedure"))
         }
     }
     
@@ -104,7 +111,7 @@ class ProcedureViewModel: ObservableObject {
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 print("Invalid response type")
-                isFetchingAllProcedures = false
+                setAllProcedureErrorData()
                 return
             }
             
@@ -113,14 +120,16 @@ class ProcedureViewModel: ObservableObject {
                     let response = try JSONDecoder().decode(AllProcedureResponseModel.self, from: data)
                     print("Success response: \(response)")
                     setAllProcedureResponseData(data: response)
-                } else {}
+                } else {
+                    setAllProcedureErrorData()
+                }
             } catch {
                 print("JSON decoding error: \(error)")
-                isFetchingAllProcedures = false
+                setAllProcedureErrorData()
             }
         } catch {
             print("Fetch all procedures failed: \(error.localizedDescription)")
-            isFetchingAllProcedures = false
+            setAllProcedureErrorData()
         }
     }
 }

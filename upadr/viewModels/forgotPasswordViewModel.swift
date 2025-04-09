@@ -37,7 +37,7 @@ class ForgotPasswordViewModel: ObservableObject {
         
         guard let jsonData = try? JSONEncoder().encode(forgotPasswordModel) else {
             print("Failed to encode")
-            isForgotPasswordLoading = false
+            setErrorData(data: ForgotPasswordResponseModel(message: "Failed to forgot password"))
             return
         }
         
@@ -50,7 +50,7 @@ class ForgotPasswordViewModel: ObservableObject {
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 print("Invalid response type")
-                isForgotPasswordLoading = false
+                setErrorData(data: ForgotPasswordResponseModel(message: "Failed to forgot password"))
                 return
             }
             
@@ -66,6 +66,7 @@ class ForgotPasswordViewModel: ObservableObject {
                 }
             } catch {
                 print("JSON decoding error: \(error.localizedDescription)")
+                setErrorData(data: ForgotPasswordResponseModel(message: "Failed to forgot password"))
             }
         } catch {
             print("Forgot password failed: \(error.localizedDescription)")

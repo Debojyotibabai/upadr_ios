@@ -22,6 +22,13 @@ class ChooseProcedureViewModel: ObservableObject {
         isError = false
     }
     
+    func setErrorData() {
+        isFetchingAllProcedures = false
+        isError = true
+        isSuccess = false
+        allProceduresResponseData = nil
+    }
+    
     func fetchAllProcedures() async {
         isFetchingAllProcedures = true
         
@@ -43,7 +50,9 @@ class ChooseProcedureViewModel: ObservableObject {
                     let response = try JSONDecoder().decode(ChooseProcedureResponse.self, from: data)
                     //                    print("Success response: \(response)")
                     setResponseData(data: response)
-                } else {}
+                } else {
+                    setErrorData()
+                }
             } catch {
                 print("JSON decoding error: \(error.localizedDescription)")
                 isFetchingAllProcedures = false

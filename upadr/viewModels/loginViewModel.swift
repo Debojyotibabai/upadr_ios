@@ -39,7 +39,7 @@ class LoginViewModel: ObservableObject {
         
         guard let jsonData = try? JSONEncoder().encode(loginWithEmailAndPasswordModel) else {
             print("Failed to encode")
-            isLoginLoading = false
+            setErrorData(data: LoginWithEmailAndPasswordError(message: "Failed to login"))
             return
         }
         
@@ -52,7 +52,7 @@ class LoginViewModel: ObservableObject {
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 print("Invalid response type")
-                isLoginLoading = false
+                setErrorData(data: LoginWithEmailAndPasswordError(message: "Failed to login"))
                 return
             }
             
@@ -68,6 +68,7 @@ class LoginViewModel: ObservableObject {
                 }
             } catch {
                 print("JSON decoding error: \(error.localizedDescription)")
+                setErrorData(data: LoginWithEmailAndPasswordError(message: "Failed to login"))
             }
         } catch {
             print("Login failed: \(error.localizedDescription)")

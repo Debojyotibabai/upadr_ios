@@ -39,7 +39,7 @@ class VerifyEmailViewModel: ObservableObject {
         
         guard let jsonData = try? JSONEncoder().encode(verifyEmailModel) else {
             print("Failed to encode")
-            isVerifyEmailLoading = false
+            setErrorData(data: VerifyEmailResponseModel(message: "Failed to OTP verification"))
             return
         }
         
@@ -52,7 +52,7 @@ class VerifyEmailViewModel: ObservableObject {
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 print("Invalid response type")
-                isVerifyEmailLoading = false
+                setErrorData(data: VerifyEmailResponseModel(message: "Failed to OTP verification"))
                 return
             }
             
@@ -68,6 +68,7 @@ class VerifyEmailViewModel: ObservableObject {
                 }
             } catch {
                 print("JSON decoding error: \(error.localizedDescription)")
+                setErrorData(data: VerifyEmailResponseModel(message: "Failed to OTP verification"))
             }
         } catch {
             print("Otp verification failed: \(error.localizedDescription)")

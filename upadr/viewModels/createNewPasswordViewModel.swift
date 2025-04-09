@@ -37,7 +37,7 @@ class CreateNewPasswordViewModel: ObservableObject {
         
         guard let jsonData = try? JSONEncoder().encode(createNewPasswordModel) else {
             print("Failed to encode")
-            isCreateNewPasswordLoading = false
+            setErrorData(data: CreateNewPasswordResponseModel(message: "Failed to reset password"))
             return
         }
         
@@ -50,7 +50,7 @@ class CreateNewPasswordViewModel: ObservableObject {
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 print("Invalid response type")
-                isCreateNewPasswordLoading = false
+                setErrorData(data: CreateNewPasswordResponseModel(message: "Failed to reset password"))
                 return
             }
             
@@ -66,6 +66,7 @@ class CreateNewPasswordViewModel: ObservableObject {
                 }
             } catch {
                 print("JSON decoding error: \(error.localizedDescription)")
+                setErrorData(data: CreateNewPasswordResponseModel(message: "Failed to reset password"))
             }
         } catch {
             print("Create new password failed: \(error.localizedDescription)")

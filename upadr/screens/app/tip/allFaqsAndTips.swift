@@ -3,6 +3,7 @@ import SwiftUI
 struct AllFaqsAndTipsScreen: View {
     @EnvironmentObject var appViewModel: AppViewModel
     @EnvironmentObject var chooseProcedureViewModel: ChooseProcedureViewModel
+    @EnvironmentObject var tipViewModel: TipViewModel
     
     func getAllProcedures() async {
         await chooseProcedureViewModel.fetchAllProcedures()
@@ -53,6 +54,7 @@ struct AllFaqsAndTipsScreen: View {
                                     .padding(.horizontal, 25)
                                     .padding(.bottom, 10)
                                     .onTapGesture {
+                                        tipViewModel.selectedProcedureForGetTips = procedure
                                         appViewModel.tipStackNavigationPath.append(TipStackScreens.particularProcedureFaqsAndTips)
                                     }
                             }
@@ -72,4 +74,5 @@ struct AllFaqsAndTipsScreen: View {
     AllFaqsAndTipsScreen()
         .environmentObject(AppViewModel())
         .environmentObject(ChooseProcedureViewModel())
+        .environmentObject(TipViewModel())
 }
