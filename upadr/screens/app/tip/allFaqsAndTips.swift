@@ -2,6 +2,11 @@ import SwiftUI
 
 struct AllFaqsAndTipsScreen: View {
     @EnvironmentObject var appViewModel: AppViewModel
+    @EnvironmentObject var chooseProcedureViewModel: ChooseProcedureViewModel
+    
+    func getAllProcedures() async {
+        await chooseProcedureViewModel.fetchAllProcedures()
+    }
     
     var body: some View {
         GeometryReader { geo in
@@ -12,28 +17,52 @@ struct AllFaqsAndTipsScreen: View {
                     .padding(.horizontal, 25)
                     .padding(.vertical, 10)
                 
-                ScrollView(showsIndicators: false) {
-                    LazyVStack {
-                        ForEach(0..<5) { index in
-                            Text("Procedure #\(index + 1)")
-                                .font(.system(size: 18, weight: .semibold))
-                                .foregroundStyle(.deepBlue)
-                                .padding()
-                                .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .center)
-                                .background(.gray5)
-                                .clipShape(
-                                    RoundedRectangle(cornerRadius: 10)
-                                )
-                                .shadow(color: Color(.systemGray4), radius: 5, x: 0, y: 3)
-                                .padding(.horizontal, 25)
-                                .padding(.bottom, 10)
-                                .onTapGesture {
-                                    appViewModel.tipStackNavigationPath.append(TipStackScreens.particularProcedureFaqsAndTips)
-                                }
+                if(chooseProcedureViewModel.isFetchingAllProcedures) {
+                    ProgressView()
+                        .frame(minWidth: 0,
+                               maxWidth: geo.size.width,
+                               minHeight: 0,
+                               maxHeight: geo.size.height,
+                               alignment: .center)
+                } else if (chooseProcedureViewModel.isError ||
+                           (chooseProcedureViewModel.isSuccess &&
+                            (chooseProcedureViewModel.allProceduresResponseData?.procedures == nil ||
+                             (chooseProcedureViewModel.allProceduresResponseData?.procedures != nil &&
+                              (chooseProcedureViewModel.allProceduresResponseData?.procedures?.count)! <= 0)))) {
+                    Text("No procedure found")
+                        .font(.subheadline)
+                        .frame(minWidth: 0,
+                               maxWidth: geo.size.width,
+                               minHeight: 0,
+                               maxHeight: geo.size.height,
+                               alignment: .center)
+                } else {
+                    ScrollView(showsIndicators: false) {
+                        LazyVStack {
+                            ForEach(chooseProcedureViewModel.allProceduresResponseData?.procedures ?? []) { procedure in
+                                Text(procedure.title ?? "")
+                                    .font(.system(size: 18, weight: .semibold))
+                                    .foregroundStyle(.deepBlue)
+                                    .padding()
+                                    .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .center)
+                                    .background(.gray5)
+                                    .clipShape(
+                                        RoundedRectangle(cornerRadius: 10)
+                                    )
+                                    .shadow(color: Color(.systemGray4), radius: 5, x: 0, y: 3)
+                                    .padding(.horizontal, 25)
+                                    .padding(.bottom, 10)
+                                    .onTapGesture {
+                                        appViewModel.tipStackNavigationPath.append(TipStackScreens.particularProcedureFaqsAndTips)
+                                    }
+                            }
                         }
                     }
                 }
             }
+        }
+        .task {
+            await getAllProcedures()
         }
     }
 }
@@ -42,4 +71,5 @@ struct AllFaqsAndTipsScreen: View {
 #Preview {
     AllFaqsAndTipsScreen()
         .environmentObject(AppViewModel())
+        .environmentObject(ChooseProcedureViewModel())
 }

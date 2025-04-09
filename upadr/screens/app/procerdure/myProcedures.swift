@@ -33,11 +33,20 @@ struct MyProceduresScreen: View {
                                    minHeight: 0,
                                    maxHeight: geo.size.height,
                                    alignment: .center)
+                    } else if(procedureViewModel.isErrorWhileFetchingAllProcedure ||
+                              (procedureViewModel.isSuccessWhileFetchingAllProcedure &&
+                               (procedureViewModel.allProceduresResponseData?.upcomingUserProcedures == nil ||
+                                (procedureViewModel.allProceduresResponseData?.upcomingUserProcedures != nil &&
+                                 (procedureViewModel.allProceduresResponseData?.upcomingUserProcedures?.count)! <= 0)))) {
+                        Text("No upcoming procedures found")
+                            .font(.subheadline)
+                            .padding(.horizontal, 25)
+                            .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .center)
                     } else {
                         LazyVStack {
                             ForEach(procedureViewModel.allProceduresResponseData?.upcomingUserProcedures ?? []) { procedure in
                                 HStack {
-                                    Text((procedure.procedure?.title)!)
+                                    Text(procedure.procedure?.title ?? "")
                                         .font(.system(size: 18, weight: .semibold))
                                         .foregroundStyle(.gray2)
                                     
@@ -80,11 +89,20 @@ struct MyProceduresScreen: View {
                                    minHeight: 0,
                                    maxHeight: geo.size.height,
                                    alignment: .center)
+                    } else if(procedureViewModel.isErrorWhileFetchingAllProcedure ||
+                              (procedureViewModel.isSuccessWhileFetchingAllProcedure &&
+                               (procedureViewModel.allProceduresResponseData?.completedUserProcedures == nil ||
+                                (procedureViewModel.allProceduresResponseData?.completedUserProcedures != nil &&
+                                 (procedureViewModel.allProceduresResponseData?.completedUserProcedures?.count)! <= 0)))) {
+                        Text("No completed procedures found")
+                            .font(.subheadline)
+                            .padding(.horizontal, 25)
+                            .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .center)
                     } else {
                         LazyVStack {
                             ForEach(procedureViewModel.allProceduresResponseData?.completedUserProcedures ?? []) { procedure in
                                 HStack {
-                                    Text((procedure.procedure?.title)!)
+                                    Text(procedure.procedure?.title ?? "")
                                         .font(.system(size: 18, weight: .semibold))
                                         .foregroundStyle(.gray2)
                                     

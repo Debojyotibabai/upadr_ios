@@ -3,6 +3,8 @@ import SwiftUI
 struct TipStack: View {
     @EnvironmentObject var appViewModel: AppViewModel
     
+    @StateObject var chooseProcedureViewModel: ChooseProcedureViewModel = ChooseProcedureViewModel()
+    
     var body: some View {
         NavigationStack(path: $appViewModel.tipStackNavigationPath) {
             AllFaqsAndTipsScreen()
@@ -13,6 +15,7 @@ struct TipStack: View {
                     }
                 }
         }
+        .environmentObject(chooseProcedureViewModel)
     }
 }
 

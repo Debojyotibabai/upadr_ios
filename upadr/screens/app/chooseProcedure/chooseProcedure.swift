@@ -46,27 +46,31 @@ struct ChooseProcedureScreen: View {
                         .padding(.horizontal, 25)
                         .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .leading)
                         
-                        if(chooseProcedureViewModel.isFetchingAllProcedures) {
+                        if chooseProcedureViewModel.isFetchingAllProcedures {
                             ProgressView()
-                        } else if(chooseProcedureViewModel.isSuccess && (chooseProcedureViewModel.allProceduresResponseData?.procedures?.count)! <= 0) {
+                        } else if (chooseProcedureViewModel.isError ||
+                                   (chooseProcedureViewModel.isSuccess &&
+                                    (chooseProcedureViewModel.allProceduresResponseData?.procedures == nil ||
+                                     (chooseProcedureViewModel.allProceduresResponseData?.procedures != nil &&
+                                      (chooseProcedureViewModel.allProceduresResponseData?.procedures?.count)! <= 0)))) {
                             Text("No procedure found")
-                                .foregroundStyle(.gray)
-                        } else if(chooseProcedureViewModel.isSuccess && (chooseProcedureViewModel.allProceduresResponseData?.procedures?.count)! > 0) {
+                                .font(.subheadline)
+                        } else {
                             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
-                                ForEach((chooseProcedureViewModel.allProceduresResponseData?.procedures)!) { procedure in
-                                    Text(procedure.title!)
+                                ForEach(chooseProcedureViewModel.allProceduresResponseData?.procedures ?? []) { procedure in
+                                    Text(procedure.title ?? "")
                                         .font(.system(size: 18, weight: .semibold))
-                                        .foregroundStyle(chooseProcedureViewModel.selectedProcedure == procedure.id! ? .white :.deepBlue)
+                                        .foregroundStyle(chooseProcedureViewModel.selectedProcedure == procedure.id ? .white : .deepBlue)
                                         .padding()
                                         .frame(minWidth: 0, maxWidth: .infinity)
                                         .background(
                                             RoundedRectangle(cornerRadius: 10)
-                                                .fill(chooseProcedureViewModel.selectedProcedure == procedure.id! ? .deepBlue : .white)
+                                                .fill(chooseProcedureViewModel.selectedProcedure == procedure.id ? .deepBlue : .white)
                                         )
                                         .overlay(RoundedRectangle(cornerRadius: 10).stroke(.deepBlue, lineWidth: 2))
                                         .padding(.horizontal, 25)
                                         .onTapGesture {
-                                            chooseProcedureViewModel.selectedProcedure = procedure.id!
+                                            chooseProcedureViewModel.selectedProcedure = procedure.id ?? ""
                                         }
                                 }
                             }
