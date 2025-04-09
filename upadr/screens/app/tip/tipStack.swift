@@ -17,6 +17,7 @@ struct TipStack: View {
                 }
         }
         .environmentObject(chooseProcedureViewModel)
+        .environmentObject(tipViewModel)
     }
 }
 

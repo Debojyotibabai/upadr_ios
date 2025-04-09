@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - ParticularProcedureTipsResponseModel
 struct ParticularProcedureTipsResponseModel: Codable {
-    let procedureTips: [ProcedureTip]
+    var procedureTips: [ProcedureTip]
     
     enum CodingKeys: String, CodingKey {
         case procedureTips = "procedure_tips"
@@ -15,6 +15,7 @@ struct ProcedureTip: Codable, Identifiable {
     let isBeforeProcedure: Bool
     let question, answer, createdAt: String
     let updatedAt: JSONNull?
+    var isExpanded: Bool = false
     
     var id: String {
         return procedureTipID

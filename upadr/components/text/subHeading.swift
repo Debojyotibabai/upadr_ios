@@ -8,6 +8,7 @@ struct SubHeading: View {
         Text(text)
             .font(.system(size: 18))
             .foregroundColor(foregroundColor ?? .black)
+            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
     }
 }
 
