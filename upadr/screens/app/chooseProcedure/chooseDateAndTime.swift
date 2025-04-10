@@ -18,6 +18,7 @@ struct ChooseDateAndTimeScreen: View {
                                                         procedureId: chooseProcedureViewModel.selectedProcedure!))
         
         if(procedureViewModel.isSuccessWhileCreatingProcedure) {
+            procedureViewModel.updateSelectedProcedureToGetDetails(procedure: procedureViewModel.createProcedureResponseData?.userProcedure ?? nil)
             appViewModel.selectedAppStack = .procedureStack
             appViewModel.procedureStackNavigationPath.append(ProcedureStackScreens.procedureAllSteps)
         }

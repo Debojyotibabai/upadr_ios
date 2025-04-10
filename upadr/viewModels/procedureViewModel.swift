@@ -13,10 +13,16 @@ class ProcedureViewModel: ObservableObject {
     @Published var createProcedureResponseData: CreateProcedureResponseModel?
     @Published var createProcedureErrorData: CreateProcedureErrorModel?
     
+    @Published var selectedProcedureToGetDetails: UserProcedure?
+    
     private var getAllProceduresURL = URL(string: "https://dev-api.upadr.com/user-procedure/get-user-procedures")!
     private var createProcedureURL = URL(string: "https://dev-api.upadr.com/user-procedure/create-user-procedure")!
     
     @AppStorage("token") var token: String?
+    
+    func updateSelectedProcedureToGetDetails(procedure: UserProcedure?) {
+        selectedProcedureToGetDetails = procedure
+    }
     
     func setCreateProcedureResponseData(data: CreateProcedureResponseModel) {
         isCreatingProcedure = false

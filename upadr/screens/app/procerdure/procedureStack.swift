@@ -3,8 +3,6 @@ import SwiftUI
 struct ProcedureStack: View {
     @EnvironmentObject var appViewModel: AppViewModel
     
-    @StateObject var procedureViewModel: ProcedureViewModel = ProcedureViewModel()
-    
     var body: some View {
         NavigationStack(path: $appViewModel.procedureStackNavigationPath) {
             MyProceduresScreen()
@@ -19,7 +17,6 @@ struct ProcedureStack: View {
                     }
                 }
         }
-        .environmentObject(procedureViewModel)
     }
 }
 

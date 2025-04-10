@@ -66,6 +66,7 @@ struct MyProceduresScreen: View {
                                 .padding(.horizontal, 25)
                                 .padding(.bottom, 10)
                                 .onTapGesture {
+                                    procedureViewModel.updateSelectedProcedureToGetDetails(procedure: procedure)
                                     appViewModel.procedureStackNavigationPath.append(ProcedureStackScreens.procedureAllSteps)
                                 }
                             }
@@ -122,6 +123,7 @@ struct MyProceduresScreen: View {
                                 .padding(.horizontal, 25)
                                 .padding(.bottom, 10)
                                 .onTapGesture {
+                                    procedureViewModel.updateSelectedProcedureToGetDetails(procedure: procedure)
                                     appViewModel.procedureStackNavigationPath.append(ProcedureStackScreens.procedureAllSteps)
                                 }
                             }
