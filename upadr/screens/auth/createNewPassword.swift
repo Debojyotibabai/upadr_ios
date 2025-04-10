@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct CreateNewPasswordScreen: View {
-    @StateObject var forgotPasswordViewModel: ForgotPasswordViewModel = ForgotPasswordViewModel()
-    @StateObject var createNewPasswordViewModel: CreateNewPasswordViewModel = CreateNewPasswordViewModel()
+    @EnvironmentObject var forgotPasswordViewModel: ForgotPasswordViewModel
+    @EnvironmentObject var createNewPasswordViewModel: CreateNewPasswordViewModel
     
     @EnvironmentObject var authViewModel: AuthViewModel
     @EnvironmentObject var authUserViewModel: AuthUserViewModel
@@ -204,6 +204,8 @@ struct CreateNewPasswordScreen: View {
 
 #Preview {
     CreateNewPasswordScreen()
+        .environmentObject(ForgotPasswordViewModel())
+        .environmentObject(CreateNewPasswordViewModel())
         .environmentObject(AuthViewModel())
         .environmentObject(AuthUserViewModel())
 }

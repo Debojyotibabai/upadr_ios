@@ -6,6 +6,12 @@ struct AuthChecking: View {
     
     @StateObject var authUserViewModel: AuthUserViewModel = AuthUserViewModel()
     
+    @StateObject var forgotPasswordViewModel: ForgotPasswordViewModel = ForgotPasswordViewModel()
+    @StateObject var createNewPasswordViewModel: CreateNewPasswordViewModel = CreateNewPasswordViewModel()
+    @StateObject var loginViewModel: LoginViewModel = LoginViewModel()
+    @StateObject var signupViewModel: SignupViewModel = SignupViewModel()
+    @StateObject var verifyEmailViewModel: VerifyEmailViewModel = VerifyEmailViewModel()
+    
     @StateObject var chooseProcedureViewModel: ChooseProcedureViewModel = ChooseProcedureViewModel()
     @StateObject var procedureViewModel: ProcedureViewModel = ProcedureViewModel()
     @StateObject var tipViewModel: TipViewModel = TipViewModel()
@@ -24,6 +30,11 @@ struct AuthChecking: View {
             WelcomeScreen()
                 .environmentObject(authVieModel)
                 .environmentObject(authUserViewModel)
+                .environmentObject(forgotPasswordViewModel)
+                .environmentObject(createNewPasswordViewModel)
+                .environmentObject(loginViewModel)
+                .environmentObject(signupViewModel)
+                .environmentObject(verifyEmailViewModel)
         }
     }
 }

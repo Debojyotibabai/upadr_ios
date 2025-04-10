@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SignupScreen: View {
-    @StateObject var signupViewModel: SignupViewModel = SignupViewModel()
+    @EnvironmentObject var signupViewModel: SignupViewModel
     
     @EnvironmentObject var authViewModel: AuthViewModel
     @EnvironmentObject var authUserViewModel: AuthUserViewModel
@@ -186,6 +186,7 @@ struct SignupScreen: View {
 
 #Preview {
     SignupScreen()
+        .environmentObject(SignupViewModel())
         .environmentObject(AuthViewModel())
         .environmentObject(AuthUserViewModel())
 }

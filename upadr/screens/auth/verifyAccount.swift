@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct VerifyAccountScreen: View {
-    @StateObject var signupViewModel: SignupViewModel = SignupViewModel()
-    @StateObject var verifyEmailViewModel: VerifyEmailViewModel = VerifyEmailViewModel()
+    @EnvironmentObject var signupViewModel: SignupViewModel
+    @EnvironmentObject var verifyEmailViewModel: VerifyEmailViewModel
     
     @EnvironmentObject var authViewModel: AuthViewModel
     @EnvironmentObject var authUserViewModel: AuthUserViewModel
@@ -173,6 +173,8 @@ struct VerifyAccountScreen: View {
 
 #Preview {
     VerifyAccountScreen()
+        .environmentObject(SignupViewModel())
+        .environmentObject(VerifyEmailViewModel())
         .environmentObject(AuthViewModel())
         .environmentObject(AuthUserViewModel())
 }
