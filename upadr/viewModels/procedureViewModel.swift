@@ -15,6 +15,11 @@ class ProcedureViewModel: ObservableObject {
     
     @Published var selectedProcedureToGetDetails: UserProcedure?
     
+    @Published var isFetchingParticularProcedureDetails: Bool = false
+    @Published var isErrorWhileFetchingParticularProcedureDetails: Bool = false
+    @Published var isSuccessWhileFetchingParticularProcedureDetails: Bool = false
+    @Published var particularProcedureDetailsResponseData: ParticularProcedureDetailsResponseModel?
+    
     private var getAllProceduresURL = URL(string: "https://dev-api.upadr.com/user-procedure/get-user-procedures")!
     private var createProcedureURL = URL(string: "https://dev-api.upadr.com/user-procedure/create-user-procedure")!
     
@@ -60,6 +65,20 @@ class ProcedureViewModel: ObservableObject {
         isErrorWhileFetchingAllProcedure = true
         isSuccessWhileFetchingAllProcedure = false
         allProceduresResponseData = nil
+    }
+    
+    func setParticularProcedureDetailsResponseData(data: ParticularProcedureDetailsResponseModel) {
+        isFetchingParticularProcedureDetails = false
+        isSuccessWhileFetchingParticularProcedureDetails = true
+        particularProcedureDetailsResponseData = data
+        isErrorWhileFetchingParticularProcedureDetails = false
+    }
+    
+    func setParticularProcedureDetailsErrorData() {
+        isFetchingParticularProcedureDetails = false
+        isErrorWhileFetchingParticularProcedureDetails = true
+        isSuccessWhileFetchingParticularProcedureDetails = false
+        particularProcedureDetailsResponseData = nil
     }
     
     func createProcedure(createProcedureRequestModel: CreateProcedureRequestModel) async {
@@ -136,6 +155,42 @@ class ProcedureViewModel: ObservableObject {
         } catch {
             print("Fetch all procedures failed: \(error.localizedDescription)")
             setAllProcedureErrorData()
+        }
+    }
+    
+    func fetchParticularProcedureDetails(userProcedureId: String) async {
+        isFetchingParticularProcedureDetails = true
+        
+        let getParticularProcedureDetailsURL = URL(string: "https://dev-api.upadr.com/user-procedure/get-user-procedure/\(userProcedureId)")!
+        
+        var request = URLRequest(url: getParticularProcedureDetailsURL)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("Invalid response type")
+                setParticularProcedureDetailsErrorData()
+                return
+            }
+            
+            do {
+                if((200...399).contains(httpResponse.statusCode)) {
+                    let response = try JSONDecoder().decode(ParticularProcedureDetailsResponseModel.self, from: data)
+                    print("Success response: \(response)")
+                    setParticularProcedureDetailsResponseData(data: response)
+                } else {
+                    setParticularProcedureDetailsErrorData()
+                }
+            } catch {
+                print("JSON decoding error: \(error)")
+                setParticularProcedureDetailsErrorData()
+            }
+        } catch {
+            print("Fetch particular procedure details failed: \(error.localizedDescription)")
+            setParticularProcedureDetailsErrorData()
         }
     }
 }

@@ -1,48 +1,80 @@
 import SwiftUI
 
 struct StepCardWithRightSideImage: View {
+    var title: String
+    var subTitle: String
+    var description: String
+    var image: String
     var seeMoreOnPress: () -> Void = {}
+    
+    var slicedDescription: String {
+        let end = min(description.count, 100)
+        let endIndex = description.index(description.startIndex, offsetBy: end)
+        return String(description[..<endIndex])
+    }
     
     var body: some View {
         HStack(spacing: 0) {
             VStack(alignment: .leading) {
-                Heading(text: "Step 1")
+                Heading(text: title)
                     .multilineTextAlignment(.leading)
                 
                 Spacer().frame(height: 5)
                 
-                SubHeading(text: "3 days before procedure", foregroundColor: .gray2)
+                Text(subTitle)
+                    .font(.system(size: 18))
+                    .foregroundColor(.gray2)
+                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                     .multilineTextAlignment(.leading)
                 
                 Spacer().frame(height: 10)
                 
-                SubHeading(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris",
-                           foregroundColor: .gray3)
-                .multilineTextAlignment(.leading)
+                Text(slicedDescription)
+                    .font(.system(size: 18))
+                    .foregroundColor(.gray3)
+                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                    .multilineTextAlignment(.leading)
                 
                 Spacer().frame(height: 10)
                 
-                Text("See More Details")
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundColor(.deepSky)
-                    .multilineTextAlignment(.leading)
-                    .onTapGesture {
-                        seeMoreOnPress()
-                    }
+                if(description.count > 100) {
+                    Text("See More Details")
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundColor(.deepSky)
+                        .multilineTextAlignment(.trailing)
+                        .onTapGesture {
+                            seeMoreOnPress()
+                        }
+                }
             }
             .padding(.leading, 25)
             .frame(minWidth: 0, maxWidth: Double.infinity, alignment: .leading)
             
-            Circle()
-                .foregroundStyle(Color(.systemGray5))
-                .offset(x: 40)
+            AsyncImage(url: URL(string: image)) { phase in
+                switch phase {
+                case .empty:
+                    ProgressView()
+                        .padding(.trailing, 25)
+                case .success(let image):
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 150, height: 150)
+                        .clipShape(Circle())
+                        .offset(x: 40)
+                case .failure:
+                    Image(systemName: "photo")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 150, height: 150)
+                        .foregroundColor(.gray)
+                        .offset(x: 40)
+                @unknown default:
+                    EmptyView()
+                }
+            }
         }
         .frame(minWidth: 0, maxWidth: Double.infinity)
         .padding(.vertical, 10)
     }
-}
-
-
-#Preview {
-    StepCardWithRightSideImage()
 }

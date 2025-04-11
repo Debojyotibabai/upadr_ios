@@ -2,6 +2,15 @@ import SwiftUI
 
 struct ProcedureAllStepsScreen: View {
     @EnvironmentObject var appViewModel: AppViewModel
+    @EnvironmentObject var procedureViewModel: ProcedureViewModel
+    
+    func getParticluarProcedureDetailsData() async {
+        guard let userProcedureId = procedureViewModel.selectedProcedureToGetDetails?.userProcedureID else {
+            return
+        }
+        
+        await procedureViewModel.fetchParticularProcedureDetails(userProcedureId: userProcedureId)
+    }
     
     var body: some View {
         GeometryReader { geo in
@@ -15,7 +24,7 @@ struct ProcedureAllStepsScreen: View {
                         Spacer().frame(height: 10)
                         
                         HStack(alignment: .top) {
-                            Heading(text: "Great! Here’s an overview on what your prep process for Procedure Name will look like.")
+                            Heading(text: "Great! Here’s an overview on what your prep process for \(procedureViewModel.selectedProcedureToGetDetails?.procedure?.title ?? "this procedure") will look like.")
                             
                             Spacer()
                             
@@ -61,16 +70,42 @@ struct ProcedureAllStepsScreen: View {
                     
                     Spacer().frame(height: 15)
                     
-                    VStack {
-                        ForEach(0..<5) { index in
-                            if(index % 2 == 0) {
-                                StepCardWithRightSideImage(seeMoreOnPress: {
-                                    appViewModel.procedureStackNavigationPath.append(ProcedureStackScreens.procedureParticularStepDetails)
-                                })
-                            } else {
-                                StepCardWithLeftSideImage(seeMoreOnPress: {
-                                    appViewModel.procedureStackNavigationPath.append(ProcedureStackScreens.procedureParticularStepDetails)
-                                })
+                    if(procedureViewModel.isFetchingParticularProcedureDetails) {
+                        ProgressView()
+                            .padding(.top, 50)
+                    } else if(procedureViewModel.isErrorWhileFetchingParticularProcedureDetails ||
+                              (procedureViewModel.isSuccessWhileFetchingParticularProcedureDetails &&
+                               (procedureViewModel.particularProcedureDetailsResponseData == nil ||
+                                (procedureViewModel.particularProcedureDetailsResponseData != nil &&
+                                 procedureViewModel.particularProcedureDetailsResponseData?.userProcedures.procedure.steps != nil &&
+                                 (procedureViewModel.particularProcedureDetailsResponseData?.userProcedures.procedure.steps?.count)! <= 0)))) {
+                        Text("No step found")
+                            .font(.subheadline)
+                            .padding(.top, 50)
+                    } else {
+                        LazyVStack {
+                            ForEach(Array((procedureViewModel.particularProcedureDetailsResponseData?.userProcedures.procedure.steps ?? []).enumerated()), id: \.offset) { index, item in
+                                if(index % 2 == 0) {
+                                    StepCardWithRightSideImage(
+                                        title: "Step \(index + 1)",
+                                        subTitle: (item.isBeforeProcedure)! ?
+                                        "\(timeStringToReadable((item.when)!)) before procedure" :
+                                            "\(timeStringToReadable((item.when)!)) after procedure",
+                                        description: (item.description)!,
+                                        image: (item.procedureStepImageURL)!,
+                                        seeMoreOnPress: {}
+                                    )
+                                } else {
+                                    StepCardWithLeftSideImage(
+                                        title: "Step \(index + 1)",
+                                        subTitle: (item.isBeforeProcedure)! ?
+                                        "\(timeStringToReadable((item.when)!)) before procedure" :
+                                            "\(timeStringToReadable((item.when)!)) after procedure",
+                                        description: (item.description)!,
+                                        image: (item.procedureStepImageURL)!,
+                                        seeMoreOnPress: {}
+                                    )
+                                }
                             }
                         }
                     }
@@ -87,11 +122,14 @@ struct ProcedureAllStepsScreen: View {
             }
         }
         .navigationBarBackButtonHidden()
+        .task {
+            await getParticluarProcedureDetailsData()
+        }
     }
 }
-
 
 #Preview {
     ProcedureAllStepsScreen()
         .environmentObject(AppViewModel())
+        .environmentObject(ProcedureViewModel())
 }

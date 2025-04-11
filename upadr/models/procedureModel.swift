@@ -24,6 +24,11 @@ struct AllProcedureResponseModel: Codable {
     let upcomingUserProcedures, completedUserProcedures: [UserProcedure]?
 }
 
+// MARK: - ParticularProcedureDetailsResponseModel
+struct ParticularProcedureDetailsResponseModel: Codable {
+    let userProcedures: UserProcedures
+}
+
 // MARK: - UserProcedure
 struct UserProcedure: Codable, Identifiable {
     let userProcedureID: String?
@@ -44,7 +49,7 @@ struct UserProcedure: Codable, Identifiable {
 // MARK: - Procedure
 struct Procedure: Codable, Identifiable {
     let procedureID, title, status, createdAt: String?
-    let updatedAt: JSONNull?
+    let updatedAt: String?
     let numberOfDefaultSteps, numberOfTotalSteps, numberOfSets: Int?
     let steps: [Step]?
     
@@ -59,7 +64,7 @@ struct Procedure: Codable, Identifiable {
 }
 
 // MARK: - Step
-struct Step: Codable {
+struct Step: Codable, Identifiable {
     let procedureStepID: String?
     let procedureSet: ProcedureSet?
     let procedureStepImageURL: String?
@@ -67,6 +72,10 @@ struct Step: Codable {
     let isBeforeProcedure: Bool?
     let description, createdAt, updatedAt, notificationTriggerTime: String?
     let contentViewedAt: JSONNull?
+    
+    var id: String? {
+        return procedureStepID
+    }
     
     enum CodingKeys: String, CodingKey {
         case procedureStepID = "procedureStepId"
@@ -84,5 +93,18 @@ struct ProcedureSet: Codable {
     enum CodingKeys: String, CodingKey {
         case procedureSetID = "procedureSetId"
         case setName
+    }
+}
+
+// MARK: - UserProcedures
+struct UserProcedures: Codable {
+    let userProcedureID: String
+    let procedure: Procedure
+    let procedureSet: ProcedureSet
+    let dateTime: String
+    
+    enum CodingKeys: String, CodingKey {
+        case userProcedureID = "userProcedureId"
+        case procedure, procedureSet, dateTime
     }
 }
