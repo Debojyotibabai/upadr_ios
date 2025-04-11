@@ -93,7 +93,10 @@ struct ProcedureAllStepsScreen: View {
                                             "\(timeStringToReadable((item.when)!)) after procedure",
                                         description: (item.description)!,
                                         image: (item.procedureStepImageURL)!,
-                                        seeMoreOnPress: {}
+                                        seeMoreOnPress: {
+                                            procedureViewModel.updateSelectedStepOfParticularProcedure(step: item, stepTitle: "Step \(index + 1)")
+                                            appViewModel.procedureStackNavigationPath.append(ProcedureStackScreens.procedureParticularStepDetails)
+                                        }
                                     )
                                 } else {
                                     StepCardWithLeftSideImage(
@@ -103,7 +106,10 @@ struct ProcedureAllStepsScreen: View {
                                             "\(timeStringToReadable((item.when)!)) after procedure",
                                         description: (item.description)!,
                                         image: (item.procedureStepImageURL)!,
-                                        seeMoreOnPress: {}
+                                        seeMoreOnPress: {
+                                            procedureViewModel.updateSelectedStepOfParticularProcedure(step: item, stepTitle: "Step \(index + 1)")
+                                            appViewModel.procedureStackNavigationPath.append(ProcedureStackScreens.procedureParticularStepDetails)
+                                        }
                                     )
                                 }
                             }

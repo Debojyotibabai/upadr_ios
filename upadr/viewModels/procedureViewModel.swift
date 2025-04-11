@@ -20,6 +20,9 @@ class ProcedureViewModel: ObservableObject {
     @Published var isSuccessWhileFetchingParticularProcedureDetails: Bool = false
     @Published var particularProcedureDetailsResponseData: ParticularProcedureDetailsResponseModel?
     
+    @Published var selectedStepTitleOfParticularProcedure: String?
+    @Published var selectedStepOfParticularProcedure: Step?
+    
     private var getAllProceduresURL = URL(string: "https://dev-api.upadr.com/user-procedure/get-user-procedures")!
     private var createProcedureURL = URL(string: "https://dev-api.upadr.com/user-procedure/create-user-procedure")!
     
@@ -27,6 +30,11 @@ class ProcedureViewModel: ObservableObject {
     
     func updateSelectedProcedureToGetDetails(procedure: UserProcedure?) {
         selectedProcedureToGetDetails = procedure
+    }
+    
+    func updateSelectedStepOfParticularProcedure(step: Step, stepTitle: String) {
+        selectedStepTitleOfParticularProcedure = stepTitle
+        selectedStepOfParticularProcedure = step
     }
     
     func setCreateProcedureResponseData(data: CreateProcedureResponseModel) {

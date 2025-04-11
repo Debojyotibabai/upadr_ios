@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ProcedureParticularStepDetailsScreen: View {
     @EnvironmentObject var appViewModel: AppViewModel
+    @EnvironmentObject var procedureViewModel: ProcedureViewModel
     
     var body: some View {
         GeometryReader { geo in
@@ -14,22 +15,37 @@ struct ProcedureParticularStepDetailsScreen: View {
                     VStack(alignment: .leading) {
                         Spacer().frame(height: 10)
                         
-                        Heading(text: "Step 1")
+                        Heading(text: procedureViewModel.selectedStepTitleOfParticularProcedure ?? "Step")
                         
                         Spacer().frame(height: 15)
                         
-                        SubHeading(text: "it’s 1 day until your procedure! Here’s what you need to know",
+                        SubHeading(text: "it’s \((procedureViewModel.selectedStepOfParticularProcedure?.isBeforeProcedure)! ? "\(timeStringToReadable((procedureViewModel.selectedStepOfParticularProcedure?.when)!)) before" : "\(timeStringToReadable((procedureViewModel.selectedStepOfParticularProcedure?.when)!)) after") your procedure! Here’s what you need to know",
                                    foregroundColor: .gray2)
                         
                         Spacer().frame(height: 15)
                         
-                        Rectangle()
-                            .frame(height: 230)
-                            .foregroundStyle(Color(.systemGray5))
+                        AsyncImage(url: URL(string: (procedureViewModel.selectedStepOfParticularProcedure?.procedureStepImageURL)!)) { phase in
+                            switch phase {
+                            case .empty:
+                                ProgressView()
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                            case .failure:
+                                Image(systemName: "photo")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .foregroundColor(.gray)
+                            @unknown default:
+                                EmptyView()
+                            }
+                        }
+                        .frame(minWidth: 0, maxWidth: geo.size.width, minHeight: 230, maxHeight: 230, alignment: .center)
                         
                         Spacer().frame(height: 15)
                         
-                        SubHeading(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                        SubHeading(text: (procedureViewModel.selectedStepOfParticularProcedure?.description)!,
                                    foregroundColor: .gray3)
                         
                         Spacer().frame(height: 15)
@@ -66,4 +82,5 @@ struct ProcedureParticularStepDetailsScreen: View {
 #Preview {
     ProcedureParticularStepDetailsScreen()
         .environmentObject(AppViewModel())
+        .environmentObject(ProcedureViewModel())
 }
