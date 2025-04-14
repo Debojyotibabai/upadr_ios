@@ -2,12 +2,28 @@ import SwiftUI
 
 struct EditProcedureScreen: View {
     @EnvironmentObject var appViewModel: AppViewModel
+    @EnvironmentObject var procedureViewModel: ProcedureViewModel
     
     @State var selectedDate: Date = Date()
     @State var showDatePicker: Bool = false
     
     @State var selectedTime: Date = Date()
     @State var showTimePicker: Bool = false
+    
+    func editProcedure() async {
+        guard let selectedProcedureToGetDetails = procedureViewModel.selectedProcedureToGetDetails else {
+            return
+        }
+        
+        let dateTime = combineDateAndTime(date: selectedDate,
+                                          time: selectedTime)
+        
+        let editProcedureRequestModel: CreateProcedureRequestModel = CreateProcedureRequestModel(dateTime: dateTime!,
+                                                                                                 procedureId: (selectedProcedureToGetDetails.procedure?.id)!)
+        
+        await procedureViewModel.editParticularProcedure(editProcedureRequestModel: editProcedureRequestModel,
+                                                         userProcedureId: (selectedProcedureToGetDetails.userProcedureID)!)
+    }
     
     var body: some View {
         GeometryReader { geo in
@@ -23,15 +39,15 @@ struct EditProcedureScreen: View {
                     
                     InputLabel(text: "Procedure name")
                     HStack {
-                        Text("Procedure")
+                        Text((procedureViewModel.selectedProcedureToGetDetails?.procedure?.title)!)
                             .font(.system(size: 18, weight: .semibold))
                             .foregroundStyle(.gray2)
                         
-                        Spacer()
-                        
-                        Image(systemName: "chevron.down")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundStyle(.gray4)
+                        //                        Spacer()
+                        //
+                        //                        Image(systemName: "chevron.down")
+                        //                            .font(.system(size: 18, weight: .semibold))
+                        //                            .foregroundStyle(.gray4)
                     }
                     .padding()
                     .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .leading)
@@ -54,9 +70,14 @@ struct EditProcedureScreen: View {
                     Spacer()
                     
                     VStack {
-                        SolidButton(text: "Done", width: geo.size.width * 0.5, onPress: {
-                            appViewModel.procedureStackNavigationPath.removeLast()
-                        })
+                        SolidButton(text: "Done",
+                                    width: geo.size.width * 0.5,
+                                    onPress: {
+                            Task {
+                                await editProcedure()
+                            }
+                        },
+                                    isLoading: procedureViewModel.isEditingProcedure)
                     }
                     .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .trailing)
                 }
@@ -66,6 +87,29 @@ struct EditProcedureScreen: View {
             }
         }
         .navigationBarBackButtonHidden()
+        .onAppear {
+            let newFormatter = ISO8601DateFormatter()
+            let date = newFormatter.date(from: (procedureViewModel.selectedProcedureToGetDetails?.dateTime)!)
+            
+            selectedDate = date ?? Date()
+            selectedTime = date ?? Date()
+        }
+        .alert(procedureViewModel.editProcedureErrorData?.message ?? "Something went wrong",
+               isPresented: $procedureViewModel.isErrorWhileEditingProcedure) {
+            Button {
+            } label: {
+                Text("Try again")
+            }
+        }
+               .alert(procedureViewModel.editProcedureResponseData?.message ?? "Procedure edited successfully",
+                      isPresented: $procedureViewModel.isSuccessWhileEditingProcedure) {
+                   Button {
+                       appViewModel.procedureStackNavigationPath.removeLast()
+                   } label: {
+                       Text("Okay")
+                   }
+                   
+               }
     }
 }
 
@@ -73,4 +117,5 @@ struct EditProcedureScreen: View {
 #Preview {
     EditProcedureScreen()
         .environmentObject(AppViewModel())
+        .environmentObject(ProcedureViewModel())
 }

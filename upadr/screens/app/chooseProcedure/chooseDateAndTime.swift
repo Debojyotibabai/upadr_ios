@@ -104,7 +104,6 @@ struct ChooseDateAndTimeScreen: View {
         .alert(procedureViewModel.createProcedureErrorData?.message ?? "Something went wrong",
                isPresented: $procedureViewModel.isErrorWhileCreatingProcedure) {
             Button {
-                procedureViewModel.resetCreateProcedureData()
             } label: {
                 Text("Okay")
             }

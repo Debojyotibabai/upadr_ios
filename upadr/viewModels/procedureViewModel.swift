@@ -23,6 +23,12 @@ class ProcedureViewModel: ObservableObject {
     @Published var selectedStepTitleOfParticularProcedure: String?
     @Published var selectedStepOfParticularProcedure: Step?
     
+    @Published var isEditingProcedure: Bool = false
+    @Published var isErrorWhileEditingProcedure: Bool = false
+    @Published var isSuccessWhileEditingProcedure: Bool = false
+    @Published var editProcedureResponseData: CreateProcedureResponseModel?
+    @Published var editProcedureErrorData: CreateProcedureErrorModel?
+    
     private var getAllProceduresURL = URL(string: "https://dev-api.upadr.com/user-procedure/get-user-procedures")!
     private var createProcedureURL = URL(string: "https://dev-api.upadr.com/user-procedure/create-user-procedure")!
     
@@ -87,6 +93,22 @@ class ProcedureViewModel: ObservableObject {
         isErrorWhileFetchingParticularProcedureDetails = true
         isSuccessWhileFetchingParticularProcedureDetails = false
         particularProcedureDetailsResponseData = nil
+    }
+    
+    func setEditProcedureResponseData(data: CreateProcedureResponseModel) {
+        isEditingProcedure = false
+        isSuccessWhileEditingProcedure = true
+        editProcedureResponseData = data
+        isErrorWhileEditingProcedure = false
+        editProcedureErrorData = nil
+    }
+    
+    func setEditProcedureErrorData(data: CreateProcedureErrorModel) {
+        isEditingProcedure = false
+        isErrorWhileEditingProcedure = true
+        editProcedureErrorData = data
+        isSuccessWhileEditingProcedure = false
+        editProcedureResponseData = nil
     }
     
     func createProcedure(createProcedureRequestModel: CreateProcedureRequestModel) async {
@@ -199,6 +221,51 @@ class ProcedureViewModel: ObservableObject {
         } catch {
             print("Fetch particular procedure details failed: \(error.localizedDescription)")
             setParticularProcedureDetailsErrorData()
+        }
+    }
+    
+    func editParticularProcedure(editProcedureRequestModel: CreateProcedureRequestModel, userProcedureId: String) async {
+        isEditingProcedure = true
+        
+        let editParticularProcedureURL = URL(string: "https://dev-api.upadr.com/user-procedure/update-user-procedure/\(userProcedureId)")!
+        
+        guard let jsonData = try? JSONEncoder().encode(editProcedureRequestModel) else {
+            print("Failed to encode")
+            setCreateProcedureErrorData(data: CreateProcedureErrorModel(message: "Failed to edit procedure"))
+            return
+        }
+        
+        var request = URLRequest(url: editParticularProcedureURL)
+        request.httpMethod = "PATCH"
+        request.setValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        do {
+            let (data,response) = try await URLSession.shared.upload(for: request, from: jsonData)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("Invalid response type")
+                setEditProcedureErrorData(data: CreateProcedureErrorModel(message: "Failed to edit procedure"))
+                return
+            }
+            
+            do {
+                if((200...399).contains(httpResponse.statusCode)) {
+                    let response = try JSONDecoder().decode(CreateProcedureResponseModel.self, from: data)
+                    print("Success response: \(response)")
+                    setEditProcedureResponseData(data: response)
+                } else {
+                    let response = try JSONDecoder().decode(CreateProcedureErrorModel.self, from: data)
+                    print("Error response: \(response)")
+                    setEditProcedureErrorData(data: response)
+                }
+            } catch {
+                print("JSON decoding error: \(error)")
+                setEditProcedureErrorData(data: CreateProcedureErrorModel(message: "Failed to edit procedure"))
+            }
+        } catch {
+            print("Edit procedure failed: \(error.localizedDescription)")
+            setEditProcedureErrorData(data: CreateProcedureErrorModel(message: "Failed to edit procedure"))
         }
     }
 }
