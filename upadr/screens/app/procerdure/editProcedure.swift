@@ -88,12 +88,20 @@ struct EditProcedureScreen: View {
         }
         .navigationBarBackButtonHidden()
         .onAppear {
-            let newFormatter = ISO8601DateFormatter()
-            let date = newFormatter.date(from: (procedureViewModel.selectedProcedureToGetDetails?.dateTime)!)
-            
-            selectedDate = date ?? Date()
-            selectedTime = date ?? Date()
+            var dateString = procedureViewModel.selectedProcedureDateTimeToEdit ?? ""
+
+            if !dateString.hasSuffix("Z") && !dateString.contains("+") {
+                dateString += "Z"
+            }
+
+            let isoFormatter = ISO8601DateFormatter()
+
+            if let date = isoFormatter.date(from: dateString) {
+                selectedDate = date
+                selectedTime = date
+            }
         }
+
         .alert(procedureViewModel.editProcedureErrorData?.message ?? "Something went wrong",
                isPresented: $procedureViewModel.isErrorWhileEditingProcedure) {
             Button {

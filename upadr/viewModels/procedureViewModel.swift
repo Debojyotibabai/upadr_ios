@@ -22,6 +22,7 @@ class ProcedureViewModel: ObservableObject {
     
     @Published var selectedStepTitleOfParticularProcedure: String?
     @Published var selectedStepOfParticularProcedure: Step?
+    @Published var selectedProcedureDateTimeToEdit: String?
     
     @Published var isEditingProcedure: Bool = false
     @Published var isErrorWhileEditingProcedure: Bool = false
@@ -41,6 +42,10 @@ class ProcedureViewModel: ObservableObject {
     func updateSelectedStepOfParticularProcedure(step: Step, stepTitle: String) {
         selectedStepTitleOfParticularProcedure = stepTitle
         selectedStepOfParticularProcedure = step
+    }
+    
+    func updateSelectedProcedureDateTimeToEdit(dateTime: String?) {
+        selectedProcedureDateTimeToEdit = dateTime
     }
     
     func setCreateProcedureResponseData(data: CreateProcedureResponseModel) {

@@ -33,6 +33,8 @@ struct ProcedureAllStepsScreen: View {
                                 
                                 Menu {
                                     Button {
+                                        procedureViewModel.updateSelectedProcedureDateTimeToEdit(dateTime: procedureViewModel.particularProcedureDetailsResponseData?.userProcedures.dateTime)
+                                        
                                         appViewModel.procedureStackNavigationPath.append(ProcedureStackScreens.editProcedure)
                                     } label: {
                                         SubHeading(text: "Edit Procedure")
