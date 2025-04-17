@@ -5,17 +5,20 @@ struct AppMainStack: View {
     @EnvironmentObject var appViewModel: AppViewModel
     @EnvironmentObject var logoutViewModel: LogoutViewModel
     
+    @AppStorage("token") var token: String?
+    
     func logout() async {
         await logoutViewModel.logout()
         
-        if(logoutViewModel.isSuccessWhileLoggingOut || logoutViewModel.isErrorWhileLoggingOut) {
-            appViewModel.isLogoutModalVisible = false
-        }
+        appViewModel.isLogoutModalVisible = false
         
         if(logoutViewModel.isSuccessWhileLoggingOut) {
-            authViewModel.resetAuthViewModel()
-            appViewModel.resetAppViewModel()
-            UserDefaults.standard.removeObject(forKey: "token")
+            token = nil
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                authViewModel.resetAuthViewModel()
+                appViewModel.resetAppViewModel()
+            }
         }
     }
     
