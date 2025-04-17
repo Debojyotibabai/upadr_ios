@@ -65,7 +65,7 @@ struct SidebarDrawer: View {
                     Spacer()
                     
                     Button {
-                        
+                        appViewModel.isLogoutModalVisible = true
                     } label: {
                         HStack(spacing: 15) {
                             Image(systemName: "rectangle.portrait.and.arrow.forward")

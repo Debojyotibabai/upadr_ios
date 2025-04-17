@@ -5,8 +5,6 @@ struct LoginScreen: View {
     
     @EnvironmentObject var authViewModel: AuthViewModel
     
-    @AppStorage("token") var token: String?
-    
     @State var emailAddress:String = ""
     @State var password:String = ""
     
@@ -23,7 +21,7 @@ struct LoginScreen: View {
                                                                                        password: password))
         
         if (loginViewModel.isLoginSuccess) {
-            token = loginViewModel.loginResponseData?.tokens.accessToken
+            UserDefaults.standard.set(loginViewModel.loginResponseData?.tokens.accessToken, forKey: "token")
         }
     }
     

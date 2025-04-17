@@ -337,7 +337,7 @@ class ProcedureViewModel: ObservableObject {
                 setCancelProcedureErrorData(data: CancelProcedureResponseModel(message: "Failed to cancel procedure"))
             }
         } catch {
-            print("CAncel procedure failed: \(error.localizedDescription)")
+            print("Cancel procedure failed: \(error.localizedDescription)")
             setCancelProcedureErrorData(data: CancelProcedureResponseModel(message: "Failed to cancel procedure"))
         }
     }

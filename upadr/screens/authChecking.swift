@@ -15,6 +15,7 @@ struct AuthChecking: View {
     @StateObject var chooseProcedureViewModel: ChooseProcedureViewModel = ChooseProcedureViewModel()
     @StateObject var procedureViewModel: ProcedureViewModel = ProcedureViewModel()
     @StateObject var tipViewModel: TipViewModel = TipViewModel()
+    @StateObject var logoutViewModel: LogoutViewModel = LogoutViewModel()
     
     @AppStorage("token") var token: String?
     
@@ -26,6 +27,7 @@ struct AuthChecking: View {
                 .environmentObject(chooseProcedureViewModel)
                 .environmentObject(procedureViewModel)
                 .environmentObject(tipViewModel)
+                .environmentObject(logoutViewModel)
         } else {
             WelcomeScreen()
                 .environmentObject(authVieModel)

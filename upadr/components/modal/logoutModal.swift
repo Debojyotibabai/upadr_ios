@@ -1,10 +1,11 @@
 import SwiftUI
 
-struct CancelProcedureModal: View {
+struct LogoutModal: View {
+    @EnvironmentObject var appViewModel: AppViewModel
+    
     var parentGeoWidth: CGFloat
-    @Binding var isCancelProcedureModalVisible: Bool
-    var onCancelProcedure: () -> Void = {}
-    var isCancellingProcedure: Bool = false
+    var onLogout: () -> Void = {}
+    var isLoggingout: Bool = false
     
     var body: some View {
         ZStack {
@@ -19,34 +20,33 @@ struct CancelProcedureModal: View {
                         .font(.system(size: 25, weight: .medium))
                         .foregroundStyle(.gray1)
                         .onTapGesture {
-                            isCancelProcedureModalVisible = false
+                            appViewModel.isLogoutModalVisible = false
                         }
                 }
                 
-                Text("Cancel Procedure")
+                Text("Log out")
                     .font(.title2)
                     .fontWeight(.semibold)
                     .foregroundStyle(.gray1)
                 
                 Spacer().frame(height: 20)
                 
-                Text("Are you sure you want to cancel your procedure? This process is irreversible and you will have to re-enter your information later.")
+                Text("Are you sure you want to log out of your account? You will have to log back in later.")
                     .font(.subheadline)
                     .foregroundStyle(.gray1)
                     .lineSpacing(4)
                 
                 Spacer().frame(height: 30)
                 
-                SolidButton(text: "Cancel Procedure",
-                            backgroundColor: .deepRed,
-                            onPress: onCancelProcedure,
-                            isLoading: isCancellingProcedure)
+                SolidButton(text: "Log out",
+                            onPress: onLogout,
+                            isLoading: isLoggingout)
                 
                 Spacer().frame(height: 15)
                 
                 BorderedButton(text: "Cancel",
                                onPress: {
-                    isCancelProcedureModalVisible = false
+                    appViewModel.isLogoutModalVisible = false
                 })
             }
             .padding()
@@ -58,5 +58,6 @@ struct CancelProcedureModal: View {
 }
 
 #Preview {
-    CancelProcedureModal(parentGeoWidth: 400, isCancelProcedureModalVisible: .constant(true))
+    LogoutModal(parentGeoWidth: 400)
+        .environmentObject(AppViewModel())
 }

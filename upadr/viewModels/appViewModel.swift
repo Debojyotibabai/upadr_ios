@@ -15,12 +15,30 @@ class AppViewModel: ObservableObject {
     
     @Published var procedureScreenFromChooseProcedureScreen: Bool = false
     
+    @Published var isLogoutModalVisible: Bool = false
+    
     func openSidebarDrawer() {
         isSidebarDrawerOpened = true
     }
     
     func closeSidebarDrawer() {
         isSidebarDrawerOpened = false
+    }
+    
+    func resetAppViewModel() {
+        chooseProcedureStackNavigationPath = NavigationPath()
+        procedureStackNavigationPath = NavigationPath()
+        tipStackNavigationPath = NavigationPath()
+        surveyStackNavigationPath = NavigationPath()
+        settingsStackNavigationPath = NavigationPath()
+        notificationStackNavigationPath = NavigationPath()
+        
+        selectedAppStack = .procedureStack
+        selectedPreviousAppStack = .procedureStack
+        
+        isSidebarDrawerOpened = false
+        procedureScreenFromChooseProcedureScreen = false
+        isLogoutModalVisible = false
     }
 }
 
