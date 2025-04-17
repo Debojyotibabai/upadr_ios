@@ -4,12 +4,26 @@ struct ProcedureAllStepsScreen: View {
     @EnvironmentObject var appViewModel: AppViewModel
     @EnvironmentObject var procedureViewModel: ProcedureViewModel
     
+    @State var isCancelProcedureModalVisible: Bool = false
+    
     func getParticluarProcedureDetailsData() async {
         guard let userProcedureId = procedureViewModel.selectedProcedureToGetDetails?.userProcedureID else {
             return
         }
         
         await procedureViewModel.fetchParticularProcedureDetails(userProcedureId: userProcedureId)
+    }
+    
+    func cancelProcedure() async {
+        guard let userProcedureId = procedureViewModel.selectedProcedureToGetDetails?.userProcedureID else {
+            return
+        }
+        
+        await procedureViewModel.cancelParticularProcedure(userProcedureId: userProcedureId)
+        
+        if(procedureViewModel.isSuccessWhileCancellingProcedure || procedureViewModel.isErrorWhileCancellingProcedure) {
+            isCancelProcedureModalVisible = false
+        }
     }
     
     var body: some View {
@@ -41,7 +55,7 @@ struct ProcedureAllStepsScreen: View {
                                     }
                                     
                                     Button {
-                                        
+                                        isCancelProcedureModalVisible = true
                                     } label: {
                                         SubHeading(text: "Cancel Procedure")
                                     }
@@ -128,11 +142,39 @@ struct ProcedureAllStepsScreen: View {
                 }
                 .frame(minWidth: 0, maxWidth: geo.size.width, alignment: .center)
             }
+            
+            if(isCancelProcedureModalVisible) {
+                CancelProcedureModal(parentGeoWidth: geo.size.width,
+                                     isCancelProcedureModalVisible: $isCancelProcedureModalVisible,
+                                     onCancelProcedure: {
+                    Task {
+                        await cancelProcedure()
+                    }
+                },
+                                     isCancellingProcedure: procedureViewModel.isCancellingProcedure)
+            }
         }
         .navigationBarBackButtonHidden()
         .task {
             await getParticluarProcedureDetailsData()
         }
+        .alert(procedureViewModel.cancelProcedureErrorData?.message ?? "Something went wrong",
+               isPresented: $procedureViewModel.isErrorWhileCancellingProcedure) {
+            Button {
+                procedureViewModel.resetCancelProcedureData()
+            } label: {
+                Text("Okay")
+            }
+        }
+               .alert(procedureViewModel.cancelProcedureResponseData?.message ?? "Procedure cancelled successfully",
+                      isPresented: $procedureViewModel.isSuccessWhileCancellingProcedure) {
+                   Button {
+                       procedureViewModel.resetCancelProcedureData()
+                       appViewModel.procedureStackNavigationPath.removeLast()
+                   } label: {
+                       Text("Okay")
+                   }
+               }
     }
 }
 

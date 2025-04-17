@@ -30,6 +30,12 @@ class ProcedureViewModel: ObservableObject {
     @Published var editProcedureResponseData: CreateProcedureResponseModel?
     @Published var editProcedureErrorData: CreateProcedureErrorModel?
     
+    @Published var isCancellingProcedure: Bool = false
+    @Published var isSuccessWhileCancellingProcedure: Bool = false
+    @Published var isErrorWhileCancellingProcedure: Bool = false
+    @Published var cancelProcedureResponseData: CancelProcedureResponseModel?
+    @Published var cancelProcedureErrorData: CancelProcedureResponseModel?
+    
     private var getAllProceduresURL = URL(string: "https://dev-api.upadr.com/user-procedure/get-user-procedures")!
     private var createProcedureURL = URL(string: "https://dev-api.upadr.com/user-procedure/create-user-procedure")!
     
@@ -114,6 +120,30 @@ class ProcedureViewModel: ObservableObject {
         editProcedureErrorData = data
         isSuccessWhileEditingProcedure = false
         editProcedureResponseData = nil
+    }
+    
+    func setCancelProcedureResponseData(data: CancelProcedureResponseModel) {
+        isCancellingProcedure = false
+        isSuccessWhileCancellingProcedure = true
+        cancelProcedureResponseData = data
+        isErrorWhileCancellingProcedure = false
+        cancelProcedureErrorData = nil
+    }
+    
+    func setCancelProcedureErrorData(data: CancelProcedureResponseModel) {
+        isCancellingProcedure = false
+        isErrorWhileCancellingProcedure = true
+        cancelProcedureErrorData = data
+        isSuccessWhileCancellingProcedure = false
+        cancelProcedureResponseData = nil
+    }
+    
+    func resetCancelProcedureData() {
+        isCancellingProcedure = false
+        isSuccessWhileCancellingProcedure = false
+        cancelProcedureResponseData = nil
+        isErrorWhileCancellingProcedure = false
+        cancelProcedureErrorData = nil
     }
     
     func createProcedure(createProcedureRequestModel: CreateProcedureRequestModel) async {
@@ -271,6 +301,44 @@ class ProcedureViewModel: ObservableObject {
         } catch {
             print("Edit procedure failed: \(error.localizedDescription)")
             setEditProcedureErrorData(data: CreateProcedureErrorModel(message: "Failed to edit procedure"))
+        }
+    }
+    
+    func cancelParticularProcedure(userProcedureId: String) async {
+        isCancellingProcedure = true
+        
+        let cancelParticularProcedureURL = URL(string: "https://dev-api.upadr.com/user-procedure/delete-user-procedure/\(userProcedureId)")!
+        
+        var request = URLRequest(url: cancelParticularProcedureURL)
+        request.httpMethod = "DELETE"
+        request.setValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
+        
+        do {
+            let (data,response) = try await URLSession.shared.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("Invalid response type")
+                setCancelProcedureErrorData(data: CancelProcedureResponseModel(message: "Failed to cancel procedure"))
+                return
+            }
+            
+            do {
+                if((200...399).contains(httpResponse.statusCode)) {
+                    let response = try JSONDecoder().decode(CancelProcedureResponseModel.self, from: data)
+                    print("Success response: \(response)")
+                    setCancelProcedureResponseData(data: response)
+                } else {
+                    let response = try JSONDecoder().decode(CancelProcedureResponseModel.self, from: data)
+                    print("Error response: \(response)")
+                    setCancelProcedureErrorData(data: response)
+                }
+            } catch {
+                print("JSON decoding error: \(error)")
+                setCancelProcedureErrorData(data: CancelProcedureResponseModel(message: "Failed to cancel procedure"))
+            }
+        } catch {
+            print("CAncel procedure failed: \(error.localizedDescription)")
+            setCancelProcedureErrorData(data: CancelProcedureResponseModel(message: "Failed to cancel procedure"))
         }
     }
 }

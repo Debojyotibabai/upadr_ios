@@ -108,3 +108,8 @@ struct UserProcedures: Codable {
         case procedure, procedureSet, dateTime
     }
 }
+
+// MARK: - CancelProcedureResponseModel
+struct CancelProcedureResponseModel: Codable {
+    let message: String
+}

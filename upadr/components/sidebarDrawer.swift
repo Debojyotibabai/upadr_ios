@@ -7,7 +7,7 @@ struct SidebarDrawer: View {
         ZStack(alignment: .leading) {
             Rectangle()
                 .ignoresSafeArea()
-                .foregroundStyle(.gray2.opacity(0.3))
+                .foregroundStyle(.black.opacity(0.5))
                 .onTapGesture {
                     appViewModel.closeSidebarDrawer()
                 }
